@@ -1,0 +1,18 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "silotracker",
+  "main": "src/worker.js",
+  "compatibility_date": "2026-10-01",
+  "keep_vars": true,
+  "workers_dev": true,
+  "preview_urls": false,
+  "observability": { "enabled": true },
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "run_worker_first": true
+  },
+  "kv_namespaces": [
+    { "binding": "SILO_KV", "id": "88ed2d97ef054c26a6c68f5d602be00b" }
+  ]
+}
