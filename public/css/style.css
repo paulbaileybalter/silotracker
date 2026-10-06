@@ -111,15 +111,6 @@ th{text-align:left;font-size:11.5px;font-weight:700;color:var(--ink-soft);paddin
 td{padding:7px 10px;border-bottom:1px solid var(--line-soft);vertical-align:middle}
 tr:last-child td{border-bottom:none}
 td.num,th.num{text-align:right}
-.grp td{background:var(--paper);font-weight:700;font-family:var(--f-display);font-size:14px}
-.grp small{font-weight:500;color:var(--ink-soft);font-family:var(--f-body);margin-left:8px}
-td input[type=number]{width:82px;text-align:right;font-weight:600;padding:6px 8px}
-.chem-name{font-weight:600} .chem-desc{font-size:12px;color:var(--ink-soft);max-width:34ch}
-.order-qty{font:700 16px var(--f-display)}
-.order-block{border:1.5px solid var(--line);border-radius:var(--r-md);padding:14px 16px;margin-top:12px}
-.order-block h4{font-size:15px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
-.order-block ul{list-style:none;margin:10px 0 0;padding:0} .order-block li{display:flex;justify-content:space-between;gap:12px;padding:5px 0;border-bottom:1px dashed var(--line)}
-.order-block li:last-child{border-bottom:none}
 .trend-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px;margin-top:16px}
 .tcard{border:1.5px solid var(--line);border-radius:var(--r-md);padding:12px;background:#fff;cursor:pointer;text-align:left;width:100%}
 .tcard:hover{border-color:var(--purple)} .tcard[aria-pressed=true]{border-color:var(--purple);background:var(--purple-10)}
@@ -145,3 +136,10 @@ footer svg{width:16px;height:16px;color:var(--mint)}
   .tabs{position:sticky;top:0;background:rgba(255,255,255,.96);backdrop-filter:blur(8px);z-index:40;border-bottom:1px solid var(--line-soft);overflow-x:auto}
   .top-actions .btn{padding:7px 12px;font-size:12.5px} .pill{padding:5px 10px;font-size:12px}
 }
+
+.drop{display:flex;flex-direction:column;align-items:center;gap:2px;padding:20px;border:2px dashed rgba(0,0,0,.18);border-radius:var(--r-md);cursor:pointer;background:var(--paper);transition:background .15s,border-color .15s}
+.drop b{font:700 15px var(--f-display)} .drop span{font-size:12.5px;color:var(--ink-soft)}
+.drop:hover,.drop.over{border-color:var(--mint);background:var(--mint-10)}
+.bk{list-style:none;margin:0;padding:0} .bk li{padding:6px 0;border-bottom:1px dashed var(--line);font-size:13px} .bk li:last-child{border-bottom:none}
+.bk__n{font-size:12px;color:var(--apricot-ink);margin-top:2px} .bk__n.bad{color:var(--red)}
+td .bk__n{white-space:normal;max-width:46ch}

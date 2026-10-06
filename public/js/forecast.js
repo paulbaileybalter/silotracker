@@ -75,8 +75,9 @@
       else { day.pool += b.brews * r.pale; day.silo4 += b.brews * r.wheat; }
     });
     const dates = (data.schedule.dates || []).slice().sort();
+    const recent = dates.slice(-28);                       // baseline for days past the schedule = the latest 4 weeks of it
     const avg = { silo1: 0, pool: 0, silo4: 0 };
-    if (dates.length) GROUP_ORDER.forEach(g => { avg[g] = dates.reduce((s, d) => s + byDate[d][g], 0) / dates.length; });
+    if (recent.length) GROUP_ORDER.forEach(g => { avg[g] = recent.reduce((s, d) => s + byDate[d][g], 0) / recent.length; });
     const first = dates[0], last = dates[dates.length - 1];
     function usage(date, g) {
       if (byDate[date]) return byDate[date][g];
@@ -170,11 +171,12 @@
     GROUP_ORDER.forEach(g => {
       const kg = GROUPS[g].silos.reduce((s, k) => s + (reading[k] || 0), 0);
       const per = reading.source === 'radar' ? st.radarUncertaintyKg : st.uncertaintyKg;
+      const asOf = (reading.asOf && reading.asOf[g]) || reading.date;   // ST26 estimates can be dated per silo
       out.groups[g] = plan({
-        g, readingKg: kg, readingISO: reading.date, todayISO, U, st, uncKg: per * Math.sqrt(GROUPS[g].silos.length),
+        g, readingKg: kg, readingISO: asOf, todayISO, U, st, uncKg: per * Math.sqrt(GROUPS[g].silos.length),
         booked: (state.deliveries || []).filter(d => d.status !== 'received')
       });
-      out.groups[g].currentKg = kg;
+      out.groups[g].currentKg = kg; out.groups[g].asOf = asOf;
     });
     return out;
   }
@@ -183,72 +185,9 @@
     return r.length ? r[r.length - 1] : null;
   }
 
-  /* ---------- chemicals ---------- */
-  function supplierPlan(sup, todayISO) {
-    if (!sup) return null;
-    if (sup.mode === 'leadDays') return { orderBy: todayISO, delivery: addDays(todayISO, sup.leadDays) };
-    let best = null;
-    (sup.cutoffs || []).forEach(c => {
-      let o = todayISO; while (dow(o) !== c.orderDow) o = addDays(o, 1);
-      let d = addDays(o, 1); while (dow(d) !== c.deliverDow) d = addDays(d, 1);
-      if (!best || ms(d) < ms(best.delivery) || (ms(d) === ms(best.delivery) && ms(o) < ms(best.orderBy))) best = { orderBy: o, delivery: d };
-    });
-    return best;
-  }
-
-  function chemUsage(id, stocktakes) {
-    const pts = (stocktakes || []).filter(s => s.counts && s.counts[id] !== undefined && s.counts[id] !== null && s.counts[id] !== '')
-      .sort((a, b) => a.date < b.date ? -1 : 1);
-    const out = [];
-    for (let i = 1; i < pts.length; i++) {
-      const prev = pts[i - 1], cur = pts[i];
-      const days = diffDays(prev.date, cur.date);
-      if (days <= 0) continue;
-      const received = parseFloat((cur.received || {})[id]) || 0;
-      const raw = parseFloat(prev.counts[id]) + received - parseFloat(cur.counts[id]);
-      out.push({ from: prev.date, date: cur.date, days, used: Math.max(0, raw), perWeek: Math.max(0, raw) / days * 7, negative: raw < 0 });
-    }
-    return { points: pts.map(p => ({ date: p.date, count: parseFloat(p.counts[id]) })), usage: out };
-  }
-  function avgWeekly(usage, n) {
-    const last = usage.slice(-(n || 4));
-    if (!last.length) return null;
-    const days = last.reduce((s, u) => s + u.days, 0), used = last.reduce((s, u) => s + u.used, 0);
-    return days ? used / days * 7 : null;
-  }
-
-  function chemRecommend(chem, count, weekly, sup, todayISO) {
-    const min = chem.min, rule = chem.rule || 'topup';
-    const out = { qty: 0, reason: null, orderBy: null, delivery: null, projected: null, weeksCover: null };
-    if (count === null || count === undefined || isNaN(count)) return out;
-    const diff = min - count;
-    let base = 0;
-    if (rule === 'topup+1') base = diff >= 0 ? diff + 1 : 0;
-    else if (rule === 'one') base = count < min ? 1 : 0;
-    else base = diff > 0 ? diff : 0;
-    const plan = supplierPlan(sup, todayISO);
-    if (plan) { out.orderBy = plan.orderBy; out.delivery = plan.delivery; }
-    if (weekly !== null && weekly > 0) out.weeksCover = count / weekly;
-    let qty = base, reason = base > 0 ? 'below' : null;
-    if (rule !== 'one' && weekly !== null && weekly > 0 && plan && !chem.noTrend) {
-      const wk = diffDays(todayISO, plan.delivery) / 7;
-      out.projected = count - weekly * wk;
-      if (base === 0 && out.projected < min) {
-        qty = min - out.projected + (rule === 'topup+1' ? 1 : 0); reason = 'trend';
-      } else if (base > 0 && out.projected < min) {
-        qty = Math.max(base, min - out.projected + (rule === 'topup+1' ? 1 : 0));
-      }
-    }
-    if (chem.unit !== 'tank%' && qty > 0) qty = Math.ceil(qty - 1e-9);
-    else qty = Math.round(qty * 100) / 100;
-    out.qty = qty; out.reason = qty > 0 ? reason || 'below' : null;
-    return out;
-  }
-
   return {
     DEFAULT_SETTINGS, GROUPS, GROUP_ORDER, mergeSettings, groupCap, groupDelivery, groupNotice, groupDays,
     ms, iso, addDays, diffDays, dow, eachDay,
-    buildUsage, project, plan, planAll, latestReading,
-    supplierPlan, chemUsage, avgWeekly, chemRecommend
+    buildUsage, project, plan, planAll, latestReading
   };
 });

@@ -45,7 +45,7 @@
     const unc = (src) => (src === 'radar' ? st.radarUncertaintyKg : st.uncertaintyKg);
     const age = rd ? App.daysAgo(rd.date) : null;
 
-    let h = notices(P, data, today, age);
+    let h = st26Card(S, data) + notices(P, data, today, age);
 
     /* --- silo board --- */
     h += `<section class="card" data-acc="mint"><div class="card__h"><div><h2>Silo levels</h2>
@@ -59,11 +59,12 @@
         <div class="silo__name">${s.name}</div><div class="silo__feeds">${s.feeds}</div>
         <div class="silo__big">${kg === null || kg === undefined ? '–' : App.t(kg)}<small> t</small></div>
         <div class="silo__rng">${rd ? 'about ' + App.t(Math.max(0, kg - unc(rd.source))) + ' to ' + App.t(kg + unc(rd.source)) + ' t' : 'no estimate yet'}</div>
+        ${rd ? `<div class="silo__rng faint">as of ${App.fmtS((rd.asOf && rd.asOf[s.group]) || rd.date)}${rd.from === 'st26' ? ' (ST26)' : ''}</div>` : ''}
         <label class="field" style="align-items:center">New estimate (t)<input type="number" inputmode="decimal" step="0.5" min="0" max="30" id="in-${s.id}" placeholder="${rd ? App.t(rd[s.id]) : 'e.g. 15'}"></label></div>`;
     });
     h += `</div><div class="row" style="margin-top:16px;justify-content:space-between"><div class="board-flow"><span>Silo 1 → DME brewhouse</span><span>Silo 2 → Silo 3 → Krones brewhouse</span><span>Silo 4 (wheat) → Krones brewhouse</span></div>
       <button class="btn btn--primary" id="saveRead" type="button">Save estimates</button></div>
-      ${rd ? `<p class="faint" style="margin:10px 0 0;font-size:12px">Last saved: ${App.fmtD(rd.date)} (${rd.source === 'radar' ? 'radar' : 'hand estimate'})${age > 0 ? ', ' + age + ' day' + (age > 1 ? 's' : '') + ' ago' : ', today'}. Leave a box blank to keep its last value.</p>` : ''}</section>`;
+      ${rd ? `<p class="faint" style="margin:10px 0 0;font-size:12px">Latest estimates: ${App.fmtD(rd.date)} (${rd.from === 'st26' ? 'from ST26' : rd.source === 'radar' ? 'radar' : 'hand estimate'})${age > 0 ? ', ' + age + ' day' + (age > 1 ? 's' : '') + ' ago' : ', today'}. Leave a box blank to keep its last value.</p>` : ''}</section>`;
 
     /* --- plan --- */
     if (rd) {
@@ -93,11 +94,36 @@
   function notices(P, data, today, age) {
     let h = '';
     const dates = data.schedule.dates, last = dates[dates.length - 1];
-    if (last < today) h += `<div class="note note--bad"><b>The ST26 schedule has run out.</b> It ends on ${App.fmtD(last)}. Use "Update from ST26" (top right) so forecasts use your current brewing schedule.</div>`;
+    if (last < today) h += `<div class="note note--bad"><b>The ST26 schedule has run out.</b> It ends on ${App.fmtD(last)}. Upload the latest ST26 above so forecasts use your current brewing schedule.</div>`;
     else if (F.diffDays(today, last) < 10) h += `<div class="note note--info">ST26 schedule covers up to <b>${App.fmtD(last)}</b>. After that, use is estimated from the average of the scheduled days (shaded on the charts).</div>`;
     if (age !== null && age > 7) h += `<div class="note"><b>Your last silo estimate is ${age} days old.</b> Forecasts get less reliable the longer it's been. Save a fresh estimate.</div>`;
     const sh = Object.keys(P.U ? P.U.assumptions : {}).length; // assumptions listed in usage card
     return h;
+  }
+
+
+  /* ---------- checks on deliveries already booked ---------- */
+  function bookedNote(pr, d) {
+    const row = pr.proj.find(r => r.date === d.date); if (!row) return null;
+    const pre = row.pre, post = pre + d.qty, cap = pr.cap, phys = (F.GROUPS[d.group].silos.length) * 30000;
+    if (pre < 0) return { bad: true, text: `On the best guess the silo is empty about ${Math.ceil(-pre / Math.max(1, row.use || 1))} day(s) before this arrives.` };
+    if (post > phys + 1) return { bad: true, text: `Arrives when the silo holds about ${App.tt(pre)}, which would take it to ${App.tt(post)}: over the physical ${App.t(phys)} t. Part of the load won't fit.` };
+    if (post > cap + 1) return { bad: false, text: `Arrives when the silo holds about ${App.tt(pre)}, taking it to ${App.tt(post)}: ${App.t(post - cap)} t over the ${App.t(cap)} t working limit.` };
+    return null;
+  }
+
+  /* ---------- ST26 upload card ---------- */
+  function st26Card(S, data) {
+    const li = S.lastImport;
+    const sumLine = li
+      ? `Last upload: <b>${esc(li.file)}</b>, ${new Date(li.at).toLocaleString('en-AU', { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' })}. Estimates as of ${App.fmtD(li.estimatesDate)}, ${li.deliveries} deliver${li.deliveries === 1 ? 'y' : 'ies'} entered, schedule to ${App.fmtD(li.scheduleTo)}.`
+      : `Showing the ST26 that came with the site: estimates as of ${App.fmtD(data.latestDate)}, ${data.deliveries.length} deliveries entered, schedule to ${App.fmtD(data.schedule.lastBrew)}.`;
+    const notes = (li ? li.notes : data.notes) || [];
+    return `<section class="card" data-acc="sky"><div class="card__h"><div><h2>Latest ST26</h2>
+      <p class="sub">Upload the workbook and the site picks up the brewing schedule, recipes, your latest silo estimates and the deliveries you've typed on the refill lines. The file is read in your browser and isn't sent anywhere.</p></div></div>
+      <div class="drop" id="drop" tabindex="0" role="button" aria-label="Upload the ST26 workbook"><b>Drop ST_26.xlsx here</b><span>or click to choose the file</span></div>
+      <p class="muted" style="font-size:13px;margin:12px 0 0">${sumLine}</p>
+      ${notes.map(n => `<p class="faint" style="font-size:12.5px;margin:4px 0 0">${esc(n.replace(/\d{4}-\d{2}-\d{2}/g, x => App.fmtD(x)))}</p>`).join('')}</section>`;
   }
 
   function planRow(g, P, today, st) {
@@ -122,8 +148,10 @@
     }
     pr.recs.slice(0, 3).forEach(r => { h += recCard(r, P, today, st); });
     if (pr.recs.length > 3) h += `<p class="faint" style="font-size:12px;margin:8px 0 0">${pr.recs.length - 3} more deliveries follow in the chart, based on average use.</p>`;
-    const booked = pr.deliveries.filter(d => d.kind === 'booked');
-    if (booked.length) h += `<p class="muted" style="font-size:12.5px;margin:10px 0 0">Already booked and counted: ${booked.map(d => App.fmtD(d.date) + ' (' + App.t(d.qty) + ' t)').join(', ')}.</p>`;
+    const booked = pr.deliveries.filter(d => d.kind === 'booked').sort((a, b) => a.date < b.date ? -1 : 1);
+    if (booked.length) h += `<div style="margin-top:12px"><div class="strong" style="font-size:13px;margin-bottom:4px">Booked and counted in this forecast</div><ul class="bk">${booked.map(d => {
+      const n = bookedNote(pr, d);
+      return `<li><b>${App.fmtD(d.date)}</b> · ${App.t(d.qty)} t${d.po ? ' · ' + esc(d.po) : ''}${n ? `<div class="bk__n ${n.bad ? 'bad' : ''}">${esc(n.text)}</div>` : ''}</li>`; }).join('')}</ul></div>`;
     h += `</div><div><div class="ch" data-chart="${g}"></div><div class="legend"><span><i style="background:${COL[g]}"></i>Best guess</span><span><i style="background:#bdbfc4"></i>Low / high end of estimate</span><span><i style="background:#14161a"></i>Working limit</span></div></div></div>`;
     return h;
   }
@@ -187,7 +215,7 @@
     if (keys.length) ah = `<details style="margin-top:14px"><summary class="muted" style="cursor:pointer;font-weight:600">Brews in the schedule that need checking (${keys.length})</summary><ul style="font-size:13px;margin:8px 0 0">` +
       keys.map(k => `<li><b>${esc(k)}</b> × ${a[k].brews}: ${a[k].how === 'none' ? 'no silo recipe found in ST26, counted as 0 kg.' : 'no recipe for this brewhouse, using the other brewhouse\'s recipe (' + a[k].kgPerBrew + ' kg pale malt per brew).'}</li>`).join('') + '</ul></details>';
     return `<section class="card" data-acc="purple"><div class="card__h"><div><h2>Grain use trends</h2>
-      <p class="sub">Silo grain per brew comes from the ST26 recipes, multiplied by the brews on the schedule (Silo 1 ← DME brews, Silos 2 + 3 and Silo 4 ← Krones brews). Hatched bars are estimates beyond the schedule.</p></div>
+      <p class="sub">Silo grain per brew comes from the ST26 recipes, multiplied by the brews on the schedule (Silo 1 ← DME brews, Silos 2 + 3 and Silo 4 ← Krones brews). Weekly view shows the last four weeks of brewing too. Hatched bars are estimates beyond the schedule.</p></div>
       <div class="seg" id="usageSeg"><button type="button" data-m="day" aria-pressed="${usageMode === 'day'}">By day</button><button type="button" data-m="week" aria-pressed="${usageMode === 'week'}">By week</button></div></div>
       <div id="usageChart" class="ch"></div>
       <div class="legend">${F.GROUP_ORDER.map(g => `<span><i style="background:${COL[g]}"></i>${F.GROUPS[g].name} (tonnes)</span>`).join('')}</div>
@@ -196,13 +224,13 @@
   function drawUsage(el, P, today) {
     const U = P.U, G = F.GROUP_ORDER; let labels = [], series;
     if (usageMode === 'day') {
-      const first = U.first || today, last = U.last || today;
+      const first = F.ms(U.first) > F.ms(F.addDays(today, -7)) ? U.first : F.addDays(today, -7), last = U.last || today;   // a week back to the end of the schedule
       const ds = F.eachDay(first, last);
       labels = ds.map(d => App.fmtS(d));
       series = G.map(g => ({ name: F.GROUPS[g].name, color: COL[g], values: ds.map(d => U.usage(d, g) / 1000) }));
     } else {
-      const mon = F.addDays(today, -((F.dow(today) + 6) % 7)), weeks = [];
-      for (let w = 0; w < 8; w++) weeks.push(F.addDays(mon, w * 7));
+      const mon = F.addDays(today, -((F.dow(today) + 6) % 7) - 28), weeks = [];
+      for (let w = 0; w < 12; w++) weeks.push(F.addDays(mon, w * 7));
       labels = weeks.map(d => App.fmtS(d));
       series = G.map(g => ({ name: F.GROUPS[g].name, color: COL[g],
         values: weeks.map(w => F.eachDay(w, F.addDays(w, 6)).reduce((s, d) => s + U.usage(d, g), 0) / 1000),
@@ -214,16 +242,24 @@
   /* ---------- bookings ---------- */
   function bookingsCard(P, today, st) {
     const S = App.state, list = S.deliveries.slice().sort((a, b) => a.date < b.date ? -1 : 1);
-    let rows = list.map(d => {
-      const M = F.GROUPS[d.group], okDay = F.groupDays(d.group, st).includes(F.dow(d.date));
-      return `<tr><td><span class="swatch" style="background:${COL[d.group]}"></span> ${M.name}</td><td>${App.fmtD(d.date)}</td><td class="num">${App.t(d.qty)} t</td>
-        <td>${d.status === 'received' ? '<span class="chip chip--n">Received</span>' : '<span class="chip chip--info">Booked</span>'}${okDay ? '' : ' <span class="chip chip--warn">Not a usual delivery day</span>'}</td>
+    const rd = P.reading, active = d => d.status !== 'received';
+    const splits = {};   // deliveries sharing a PO on the same day are one truck split between silos
+    list.filter(active).forEach(d => { if (d.po) { const k = d.date + '|' + d.po; (splits[k] = splits[k] || []).push(d); } });
+    const splitKeys = Object.keys(splits).filter(k => splits[k].length > 1);
+    const inSplit = d => splitKeys.some(k => splits[k].includes(d));
+    const rows = list.map(d => {
+      const M = F.GROUPS[d.group], okDay = F.groupDays(d.group, st).includes(F.dow(d.date)), std = F.groupDelivery(d.group, st);
+      const pr = P.groups && P.groups[d.group], n = pr && active(d) ? bookedNote(pr, d) : null;
+      return `<tr><td><span class="swatch" style="background:${COL[d.group]}"></span> ${M.name}</td><td>${App.fmtD(d.date)}</td><td class="num">${App.t(d.qty)} t</td><td>${esc(d.po || '')}</td>
+        <td>${d.status === 'received' ? '<span class="chip chip--n">Received</span>' : '<span class="chip chip--info">Booked</span>'}${d.source === 'st26' ? ' <span class="chip chip--n">From ST26</span>' : ''}${okDay ? '' : ' <span class="chip chip--warn">Not a usual delivery day</span>'}${d.qty !== std && !inSplit(d) ? ' <span class="chip chip--warn">Not a standard ' + App.t(std) + ' t load</span>' : ''}${n ? `<div class="bk__n ${n.bad ? 'bad' : ''}">${esc(n.text)}</div>` : ''}</td>
         <td class="num">${d.status === 'received' ? '' : `<button class="btn btn--sm" data-recv="${d.id}">Mark received</button> `}<button class="btn btn--sm btn--danger" data-deldel="${d.id}">Remove</button></td></tr>`;
     }).join('');
+    const splitNote = splitKeys.map(k => { const ds = splits[k]; return `${App.fmtD(ds[0].date)}: ${ds.map(d => F.GROUPS[d.group].name + ' ' + App.t(d.qty) + ' t').join(' + ')} = ${App.t(ds.reduce((s, d) => s + d.qty, 0))} t on ${esc(ds[0].po)} (one truck split between silos).`; });
     const nextDay = g => { const n = F.groupNotice(g, st); let d = F.addDays(today, n); while (!F.groupDays(g, st).includes(F.dow(d))) d = F.addDays(d, 1); return d; };
     return `<section class="card" data-acc="sky"><div class="card__h"><div><h2>Booked deliveries</h2>
-      <p class="sub">Add a delivery once you've booked it. It's counted in every forecast so the plan stops asking for the same truck twice. Mark it received after it arrives, then save fresh silo estimates (the estimate should include the delivered grain).</p></div></div>
-      ${list.length ? `<div class="tscroll"><table><thead><tr><th>Silo</th><th>Delivery date</th><th class="num">Amount</th><th>Status</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>` : '<div class="empty">No deliveries booked yet.</div>'}
+      <p class="sub">Deliveries typed on the refill lines in ST26 appear here after each upload, and every forecast counts them, so the plan only asks for deliveries on top of these. You can also add one by hand. Mark a delivery received once it arrives, then update the silo estimates.</p></div></div>
+      ${list.length ? `<div class="tscroll"><table><thead><tr><th>Silo</th><th>Delivery date</th><th class="num">Amount</th><th>PO</th><th>Status</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>` : '<div class="empty">No deliveries booked yet.</div>'}
+      ${splitNote.length ? `<p class="muted" style="font-size:12.5px;margin:10px 0 0">${splitNote.join('<br>')}</p>` : ''}
       <div class="row" style="margin-top:14px;align-items:flex-end"><label class="field">Goes to<select id="bkGroup"><option value="silo1">Silo 1 (pale)</option><option value="pool" selected>Silos 2 + 3 (pale)</option><option value="silo4">Silo 4 (wheat)</option></select></label>
       <label class="field">Delivery date<input type="date" id="bkDate" value="${nextDay('pool')}"></label>
       <label class="field">Amount (t)<input type="number" step="0.5" id="bkQty" value="${App.t(st.paleDelivery)}" style="width:90px"></label>
@@ -243,13 +279,21 @@
     const S = App.state;
     App.$$('#srcSeg button', el).forEach(b => b.addEventListener('click', () => { readSource = b.dataset.src; render(el); App.drawCharts(); }));
     App.$$('#usageSeg button', el).forEach(b => b.addEventListener('click', () => { usageMode = b.dataset.m; App.$$('#usageSeg button', el).forEach(x => x.setAttribute('aria-pressed', x === b)); const ub = App.$('#usageChart', el); drawUsage(ub, P, today); }));
+    const drop = App.$('#drop', el);
+    if (drop) {
+      const pick = () => App.$('#importFile').click();
+      drop.addEventListener('click', pick); drop.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(); } });
+      ['dragenter', 'dragover'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('over'); }));
+      ['dragleave', 'drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('over'); }));
+      drop.addEventListener('drop', e => App.importST26(e.dataTransfer.files[0]));
+    }
     const save = App.$('#saveRead', el);
     if (save) save.addEventListener('click', () => {
-      const prev = P.reading, rec = { id: App.uid(), date: App.$('#rdDate', el).value || today, source: readSource, savedAt: new Date().toISOString() };
+      const prev = P.reading, rec = { id: App.uid(), date: App.$('#rdDate', el).value || today, source: readSource, savedAt: new Date().toISOString(), entered: [] };
       for (const s of SILOS) {
         const raw = App.$('#in-' + s.id, el).value, v = App.num(raw);
         if (v === null) { if (prev) rec[s.id] = prev[s.id]; else return App.toast('Enter an estimate for ' + s.name + ' (use 0 if empty)'); }
-        else { if (v < 0 || v > 30) return App.toast(s.name + ': enter between 0 and 30 tonnes'); rec[s.id] = Math.round(v * 1000); }
+        else { if (v < 0 || v > 30) return App.toast(s.name + ': enter between 0 and 30 tonnes'); rec[s.id] = Math.round(v * 1000); rec.entered.push(s.id); }
       }
       S.readings = S.readings.filter(r => r.date !== rec.date); S.readings.push(rec);
       App.save(); App.toast('Estimates saved'); App.render();

@@ -71,7 +71,7 @@ async function stateApi(request, env) {
     if (body.length > 2_000_000) return json({ error: 'Too large' }, 413);
     let incoming;
     try { incoming = JSON.parse(body); } catch (e) { return json({ error: 'Bad JSON' }, 400); }
-    if (!incoming || incoming.v !== 1 || !Array.isArray(incoming.readings) || !Array.isArray(incoming.stocktakes)) return json({ error: 'Not a valid state' }, 400);
+    if (!incoming || incoming.v !== 1 || !Array.isArray(incoming.readings)) return json({ error: 'Not a valid state' }, 400);
     const raw = await env.SILO_KV.get('state');
     if (raw) { const cur = JSON.parse(raw); if ((cur.updatedAt || 0) > (incoming.updatedAt || 0)) return json({ error: 'A newer version exists' }, 409); }
     await env.SILO_KV.put('state', body);

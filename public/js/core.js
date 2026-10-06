@@ -21,9 +21,10 @@ window.App = (function () {
   App.daysAgo = d => F.diffDays(d, App.todayISO());
 
   /* ---------- state ---------- */
-  const blank = () => ({ v: 1, updatedAt: 0, readings: [], deliveries: [], stocktakes: [], settings: {}, chem: {}, st26: null });
+  const blank = () => ({ v: 1, updatedAt: 0, readings: [], deliveries: [], settings: {}, st26: null, seeded: false, lastImport: null });
+  const clean = s => { const o = Object.assign(blank(), s); delete o.stocktakes; delete o.chem; return o; };   // chemical entries from the earlier version are dropped
   App.state = blank();
-  function loadLocal() { try { const s = JSON.parse(localStorage.getItem(KEY)); if (s && s.v === 1) App.state = Object.assign(blank(), s); } catch (e) { /* first run */ } }
+  function loadLocal() { try { const s = JSON.parse(localStorage.getItem(KEY)); if (s && s.v === 1) App.state = clean(s); } catch (e) { /* first run */ } }
 
   /* ---------- sync ---------- */
   let remoteOk = null, saveTimer = null;
@@ -51,7 +52,7 @@ window.App = (function () {
       remoteOk = true;
       const j = await r.json();
       if (j && j.state && (force || j.state.updatedAt > App.state.updatedAt)) {
-        App.state = Object.assign(blank(), j.state);
+        App.state = clean(j.state);
         localStorage.setItem(KEY, JSON.stringify(App.state));
         setSync('ok', 'Saved · synced'); return true;
       }
@@ -69,14 +70,6 @@ window.App = (function () {
     const d = s && bundled && s.builtAt > bundled.builtAt ? s : (s && !bundled ? s : bundled);
     return d;
   };
-  App.chemicals = function () {         // ST26 list + the user's own edits
-    const d = App.data(); if (!d) return [];
-    return d.chemicals.map(c => {
-      const o = App.state.chem[c.id] || {};
-      return Object.assign({}, c, { min: o.min !== undefined ? o.min : c.min, supplier: o.supplier || c.supplier, active: o.active !== undefined ? o.active : !c.discontinued });
-    });
-  };
-  App.suppliers = () => { const d = App.data(); return d ? d.suppliers : {}; };
   App.settings = () => F.mergeSettings(App.state.settings);
 
   async function loadBundled() {
@@ -95,26 +88,37 @@ window.App = (function () {
       document.head.appendChild(s);
     });
   }
+  // Put the estimates and deliveries from a parsed ST26 into the site's own records.
+  App.applyST26 = function (out) {
+    const S = App.state, L = out.levels, date = out.latestDate;
+    S.readings = S.readings.filter(x => x.date !== date);
+    S.readings.push({ id: App.uid(), date, silo1: L.silo1.kg, silo2: L.pool.silo2, silo3: L.pool.silo3, silo4: L.silo4.kg,
+      source: 'estimate', from: 'st26', asOf: out.asOf, savedAt: new Date().toISOString() });
+    // ST26 is the master for deliveries: replace earlier ST26 deliveries, and drop hand-entered ones it now covers
+    S.deliveries = S.deliveries.filter(d => d.source !== 'st26' && !out.deliveries.some(n => n.group === d.group && n.date === d.date));
+    out.deliveries.forEach(n => S.deliveries.push({ id: App.uid(), group: n.group, date: n.date, qty: n.qty, po: n.po || '', source: 'st26', status: 'booked' }));
+    S.seeded = true;
+    S.lastImport = { at: new Date().toISOString(), file: out.source, estimatesDate: date, deliveries: out.deliveries.length, scheduleTo: out.schedule.lastBrew, notes: out.notes || [] };
+  };
   App.importST26 = async function (file) {
     if (!file) return;
-    App.toast('Reading ' + file.name + '…');
+    if (!/\.xls[xm]$/i.test(file.name)) return App.toast('Choose the ST26 Excel file (.xlsx)');
+    App.toast('Reading ' + file.name + '. This takes a few seconds…');
     try {
       await loadXLSX();
       const buf = await file.arrayBuffer();
-      const wb = XLSX.read(buf, { type: 'array', sheets: ST26Parser.SHEETS, cellFormula: true });
+      const wb = XLSX.read(buf, { type: 'array', sheets: ST26Parser.SHEETS, cellFormula: false });
       const out = ST26Parser.parseWorkbook(wb, file.name);
-      if (!out.schedule.dates.length) throw new Error('No schedule dates found on the Demand Summary sheet.');
-      if (!out.chemicals.length) throw new Error('No chemicals found on the Chemicals sheet.');
-      App.state.st26 = out; App.save(); App.render();
-      App.toast('ST26 updated: ' + out.schedule.dates.length + ' schedule days, ' + out.chemicals.length + ' chemicals');
-    } catch (e) { App.toast('Import failed: ' + e.message); console.error(e); }
+      App.state.st26 = out; App.applyST26(out); App.save(); App.render();
+      App.toast('ST26 loaded: estimates as of ' + App.fmtS(out.latestDate) + ', ' + out.deliveries.length + ' deliveries, schedule to ' + App.fmtS(out.schedule.lastBrew));
+    } catch (e) { App.toast('Upload failed: ' + e.message); console.error(e); }
   };
 
   /* ---------- tabs / render ---------- */
   let tab = 'grain';
   App.render = function () {
     App.redraws = [];
-    ['grain', 'chem', 'settings'].forEach(t => {
+    ['grain', 'history', 'settings'].forEach(t => {
       const sec = App.$('#tab-' + t), on = t === tab;
       sec.hidden = !on; App.$('[data-tab="' + t + '"]').setAttribute('aria-selected', on);
     });
@@ -127,9 +131,9 @@ window.App = (function () {
 
   App.init = async function () {
     loadLocal();
-    const h = location.hash.replace('#', ''); if (['grain', 'chem', 'settings'].includes(h)) tab = h;
+    const h = location.hash.replace('#', ''); if (['grain', 'history', 'settings'].includes(h)) tab = h;
     App.$$('.tab').forEach(b => b.addEventListener('click', () => App.setTab(b.dataset.tab)));
-    window.addEventListener('hashchange', () => { const x = location.hash.replace('#', ''); if (['grain', 'chem', 'settings'].includes(x) && x !== tab) { tab = x; App.render(); } });
+    window.addEventListener('hashchange', () => { const x = location.hash.replace('#', ''); if (['grain', 'history', 'settings'].includes(x) && x !== tab) { tab = x; App.render(); } });
     App.$('#syncNow').addEventListener('click', App.syncNow);
     App.$('#importBtn').addEventListener('click', () => App.$('#importFile').click());
     App.$('#importFile').addEventListener('change', e => { App.importST26(e.target.files[0]); e.target.value = ''; });
@@ -138,6 +142,7 @@ window.App = (function () {
     try { await loadBundled(); } catch (e) { App.$('#tab-grain').innerHTML = '<div class="note note--bad">' + App.esc(e.message) + '</div>'; return; }
     await pullRemote(false);
     if (remoteOk === false) setSync('', 'Saved on this device only');
+    if (!App.state.seeded && !App.state.readings.length && bundled && bundled.levels) { App.applyST26(bundled); App.save(); }   // first visit: start from the ST26 that shipped with the site
     App.render();
   };
   return App;

@@ -53,17 +53,17 @@
     });
     o.series.forEach(se => {
       let d = ''; let started = false;
-      se.values.forEach((v, i) => { if (v === null || v === undefined) { started = false; return; } d += (started ? 'L' : 'M') + X(i).toFixed(1) + ' ' + Y(v).toFixed(1); started = true; });
+      se.values.forEach((v, i) => { if (v === null || v === undefined) { if (!se.connect) started = false; return; } d += (started ? 'L' : 'M') + X(i).toFixed(1) + ' ' + Y(v).toFixed(1); started = true; });   // connect: join sparse readings across gaps
       if (se.area) {
         const first = se.values.findIndex(v => v !== null), last = se.values.length - 1 - [...se.values].reverse().findIndex(v => v !== null);
         if (first >= 0) s += `<path d="${d} L${X(last).toFixed(1)} ${Y(ymin)} L${X(first).toFixed(1)} ${Y(ymin)} Z" fill="${se.color}" opacity=".14"/>`;
       }
       s += `<path d="${d}" fill="none" stroke="${se.color}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"${se.dash ? ` stroke-dasharray="${se.dash}"` : ''}/>`;
-      if (se.dots) se.values.forEach((v, i) => { if (v !== null) s += `<circle cx="${X(i)}" cy="${Y(v)}" r="4" fill="#fff" stroke="${se.color}" stroke-width="2.5"/>`; });
+      if (se.dots) se.values.forEach((v, i) => { if (v !== null && v !== undefined) s += `<circle cx="${X(i)}" cy="${Y(v)}" r="${se.dotR || 4}" fill="${se.solid && se.solid[i] ? se.color : '#fff'}" stroke="${se.color}" stroke-width="2"/>`; });
     });
     (o.markers || []).forEach(mk => {
       const x = X(mk.i), y = Y(mk.y);
-      s += `<g><line x1="${x}" x2="${x}" y1="${y}" y2="${m.t + ih}" stroke="${mk.color}" stroke-width="1.5" stroke-dasharray="2 3"/><circle cx="${x}" cy="${y}" r="6" fill="${mk.color}" stroke="#fff" stroke-width="2"/><title>${esc(mk.title || '')}</title></g>`;
+      s += `<g><line x1="${x}" x2="${x}" y1="${y}" y2="${m.t + ih}" stroke="${mk.color}" stroke-width="1.5" stroke-dasharray="2 3"/><circle cx="${x}" cy="${y}" r="${mk.r || 6}" fill="${mk.color}" stroke="#fff" stroke-width="2"/><title>${esc(mk.title || '')}</title></g>`;
     });
     if (o.todayIndex !== undefined && o.todayIndex >= 0) { const x = X(o.todayIndex); s += `<line x1="${x}" x2="${x}" y1="${m.t}" y2="${m.t + ih}" class="ch-today"/><text x="${x + 4}" y="${m.t + ih - 5}" class="ch-bandlabel">Today</text>`; }
     s += `<line class="ch-hover" x1="0" x2="0" y1="${m.t}" y2="${m.t + ih}" style="display:none"/><rect class="ch-hit" x="${m.l}" y="${m.t}" width="${iw}" height="${ih}" fill="transparent"/></svg><div class="ch-tip" hidden></div>`;

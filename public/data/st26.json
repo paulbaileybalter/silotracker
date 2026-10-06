@@ -1,5 +1,5 @@
 {
- "builtAt": "2026-10-06T01:31:56.411Z",
+ "builtAt": "2026-10-06T01:50:41.716Z",
  "source": "ST_26.xlsx",
  "aliases": {
   "EAZY": "EAZY HAZY"
@@ -96,8 +96,1365 @@
    }
   }
  },
+ "unmapped": {
+  "DOLCITA @ DME": 2,
+  "LPA @ Krones": 4,
+  "LIMITED @ DME": 6,
+  "BLACK @ Krones": 1
+ },
+ "levels": {
+  "silo1": {
+   "kg": 20000,
+   "date": "2026-10-06"
+  },
+  "silo4": {
+   "kg": 5500,
+   "date": "2026-10-06"
+  },
+  "pool": {
+   "silo2": 0,
+   "silo3": 20000,
+   "date": "2026-10-06"
+  }
+ },
+ "asOf": {
+  "silo1": "2026-10-06",
+  "pool": "2026-10-06",
+  "silo4": "2026-10-06"
+ },
+ "latestDate": "2026-10-06",
+ "notes": [
+  "Silo 2 was blank on 2026-10-06 while Silo 3 had an estimate, so Silo 2 is treated as empty."
+ ],
+ "deliveries": [
+  {
+   "group": "pool",
+   "date": "2026-10-07",
+   "qty": 24000,
+   "po": "PO21555"
+  },
+  {
+   "group": "silo4",
+   "date": "2026-10-08",
+   "qty": 26000,
+   "po": "PO21458"
+  },
+  {
+   "group": "pool",
+   "date": "2026-10-13",
+   "qty": 24000,
+   "po": "PO21556"
+  },
+  {
+   "group": "silo1",
+   "date": "2026-10-16",
+   "qty": 6000,
+   "po": "PO21635"
+  },
+  {
+   "group": "pool",
+   "date": "2026-10-16",
+   "qty": 18000,
+   "po": "PO21635"
+  },
+  {
+   "group": "pool",
+   "date": "2026-10-22",
+   "qty": 24000,
+   "po": "PO21636"
+  },
+  {
+   "group": "pool",
+   "date": "2026-10-28",
+   "qty": 24000,
+   "po": ""
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-09-15",
+   "silo1": 11000,
+   "silo2": 1500,
+   "silo3": 21500,
+   "silo4": 20500
+  },
+  {
+   "date": "2025-09-19",
+   "silo1": 9000,
+   "silo2": 19500,
+   "silo3": 22500,
+   "silo4": 19000
+  },
+  {
+   "date": "2025-09-22",
+   "silo1": 9000,
+   "silo2": 5000,
+   "silo3": 21500,
+   "silo4": 19000
+  },
+  {
+   "date": "2025-09-25",
+   "silo1": 7000,
+   "silo2": null,
+   "silo3": null,
+   "silo4": 18000
+  },
+  {
+   "date": "2025-09-26",
+   "silo1": null,
+   "silo2": 15500,
+   "silo3": 21500,
+   "silo4": null
+  },
+  {
+   "date": "2025-09-29",
+   "silo1": 23500,
+   "silo2": 4250,
+   "silo3": 21500,
+   "silo4": 14500
+  },
+  {
+   "date": "2025-10-02",
+   "silo1": 21000,
+   "silo2": 21000,
+   "silo3": 20500,
+   "silo4": 10000
+  },
+  {
+   "date": "2025-10-10",
+   "silo1": 19400,
+   "silo2": 21500,
+   "silo3": 18000,
+   "silo4": 4000
+  },
+  {
+   "date": "2025-10-13",
+   "silo1": 15000,
+   "silo2": 9500,
+   "silo3": 20500,
+   "silo4": 4000
+  },
+  {
+   "date": "2025-10-17",
+   "silo1": 12500,
+   "silo2": 15000,
+   "silo3": 23000,
+   "silo4": 25000
+  },
+  {
+   "date": "2025-10-20",
+   "silo1": 12000,
+   "silo2": 7000,
+   "silo3": 23500,
+   "silo4": 21000
+  },
+  {
+   "date": "2025-10-24",
+   "silo1": null,
+   "silo2": 24000,
+   "silo3": 24000,
+   "silo4": null
+  },
+  {
+   "date": "2025-10-27",
+   "silo1": 21000,
+   "silo2": 16000,
+   "silo3": 22000,
+   "silo4": 16000
+  },
+  {
+   "date": "2025-10-31",
+   "silo1": 21000,
+   "silo2": 18000,
+   "silo3": 21500,
+   "silo4": 12500
+  },
+  {
+   "date": "2025-11-03",
+   "silo1": 21000,
+   "silo2": 10500,
+   "silo3": 18000,
+   "silo4": 9000
+  },
+  {
+   "date": "2025-11-14",
+   "silo1": 15500,
+   "silo2": 12500,
+   "silo3": 21500,
+   "silo4": 24000
+  },
+  {
+   "date": "2025-11-21",
+   "silo1": 13000,
+   "silo2": null,
+   "silo3": null,
+   "silo4": null
+  },
+  {
+   "date": "2025-11-24",
+   "silo1": 10000,
+   "silo2": 10500,
+   "silo3": 23500,
+   "silo4": 17000
+  },
+  {
+   "date": "2025-11-28",
+   "silo1": 10000,
+   "silo2": 24000,
+   "silo3": 23500,
+   "silo4": 15000
+  },
+  {
+   "date": "2025-12-05",
+   "silo1": 21000,
+   "silo2": 24000,
+   "silo3": 23000,
+   "silo4": 6000
+  },
+  {
+   "date": "2025-12-08",
+   "silo1": 20000,
+   "silo2": 12500,
+   "silo3": 21500,
+   "silo4": 4000
+  },
+  {
+   "date": "2025-12-12",
+   "silo1": 18000,
+   "silo2": 17500,
+   "silo3": 22000,
+   "silo4": 26000
+  },
+  {
+   "date": "2025-12-15",
+   "silo1": 17000,
+   "silo2": 1500,
+   "silo3": 23500,
+   "silo4": 22500
+  },
+  {
+   "date": "2025-12-19",
+   "silo1": 14000,
+   "silo2": 12000,
+   "silo3": 23000,
+   "silo4": 18900
+  },
+  {
+   "date": "2025-12-22",
+   "silo1": 11500,
+   "silo2": 500,
+   "silo3": 23500,
+   "silo4": 17000
+  },
+  {
+   "date": "2026-01-05",
+   "silo1": null,
+   "silo2": 15000,
+   "silo3": 23500,
+   "silo4": 11000
+  },
+  {
+   "date": "2026-01-09",
+   "silo1": 21000,
+   "silo2": 24000,
+   "silo3": 21000,
+   "silo4": 9000
+  },
+  {
+   "date": "2026-01-12",
+   "silo1": 20500,
+   "silo2": 11500,
+   "silo3": 23500,
+   "silo4": 5500
+  },
+  {
+   "date": "2026-01-16",
+   "silo1": 18900,
+   "silo2": 18000,
+   "silo3": 24000,
+   "silo4": 26000
+  },
+  {
+   "date": "2026-01-19",
+   "silo1": 18000,
+   "silo2": 9500,
+   "silo3": 23500,
+   "silo4": 24000
+  },
+  {
+   "date": "2026-01-23",
+   "silo1": 17000,
+   "silo2": 24000,
+   "silo3": 22000,
+   "silo4": 20000
+  },
+  {
+   "date": "2026-01-30",
+   "silo1": 14000,
+   "silo2": 20500,
+   "silo3": 21000,
+   "silo4": 15000
+  },
+  {
+   "date": "2026-02-02",
+   "silo1": 6000,
+   "silo2": 9000,
+   "silo3": 22000,
+   "silo4": 15000
+  },
+  {
+   "date": "2026-02-09",
+   "silo1": 10000,
+   "silo2": 24000,
+   "silo3": 21000,
+   "silo4": null
+  },
+  {
+   "date": "2026-02-13",
+   "silo1": 22000,
+   "silo2": 21000,
+   "silo3": 20000,
+   "silo4": 14000
+  },
+  {
+   "date": "2026-02-16",
+   "silo1": 21000,
+   "silo2": 15500,
+   "silo3": 18000,
+   "silo4": 10000
+  },
+  {
+   "date": "2026-02-19",
+   "silo1": 23500,
+   "silo2": 12500,
+   "silo3": 24000,
+   "silo4": 9500
+  },
+  {
+   "date": "2026-02-23",
+   "silo1": 21000,
+   "silo2": 10000,
+   "silo3": 19000,
+   "silo4": 5000
+  },
+  {
+   "date": "2026-02-27",
+   "silo1": 20000,
+   "silo2": 17000,
+   "silo3": 24000,
+   "silo4": 4500
+  },
+  {
+   "date": "2026-03-02",
+   "silo1": 17000,
+   "silo2": 17000,
+   "silo3": 24000,
+   "silo4": 4500
+  },
+  {
+   "date": "2026-03-04",
+   "silo1": 13000,
+   "silo2": null,
+   "silo3": null,
+   "silo4": null
+  },
+  {
+   "date": "2026-03-06",
+   "silo1": 17000,
+   "silo2": 16000,
+   "silo3": 18000,
+   "silo4": 4200
+  },
+  {
+   "date": "2026-03-09",
+   "silo1": 15500,
+   "silo2": 15000,
+   "silo3": 6000,
+   "silo4": 2000
+  },
+  {
+   "date": "2026-03-13",
+   "silo1": 15500,
+   "silo2": 24000,
+   "silo3": 15500,
+   "silo4": 26000
+  },
+  {
+   "date": "2026-03-16",
+   "silo1": 13500,
+   "silo2": 12500,
+   "silo3": 21000,
+   "silo4": 22500
+  },
+  {
+   "date": "2026-03-20",
+   "silo1": 24000,
+   "silo2": 11500,
+   "silo3": 16500,
+   "silo4": 21000
+  },
+  {
+   "date": "2026-03-23",
+   "silo1": 24000,
+   "silo2": null,
+   "silo3": 24000,
+   "silo4": 20700
+  },
+  {
+   "date": "2026-03-27",
+   "silo1": 23500,
+   "silo2": 25500,
+   "silo3": 24000,
+   "silo4": 23500
+  },
+  {
+   "date": "2026-03-30",
+   "silo1": 21900,
+   "silo2": 8000,
+   "silo3": 24000,
+   "silo4": 19000
+  },
+  {
+   "date": "2026-04-02",
+   "silo1": 20000,
+   "silo2": 18000,
+   "silo3": 24000,
+   "silo4": 18000
+  },
+  {
+   "date": "2026-04-07",
+   "silo1": 20000,
+   "silo2": 18000,
+   "silo3": 24000,
+   "silo4": 18000
+  },
+  {
+   "date": "2026-04-10",
+   "silo1": 23500,
+   "silo2": 24000,
+   "silo3": 24000,
+   "silo4": 14500
+  },
+  {
+   "date": "2026-04-13",
+   "silo1": 21000,
+   "silo2": 22000,
+   "silo3": 21000,
+   "silo4": 12500
+  },
+  {
+   "date": "2026-04-17",
+   "silo1": 21000,
+   "silo2": 9500,
+   "silo3": 24000,
+   "silo4": 12500
+  },
+  {
+   "date": "2026-04-20",
+   "silo1": 21000,
+   "silo2": 1000,
+   "silo3": 20000,
+   "silo4": 9000
+  },
+  {
+   "date": "2026-05-01",
+   "silo1": 16500,
+   "silo2": 1500,
+   "silo3": 22000,
+   "silo4": 4000
+  },
+  {
+   "date": "2026-05-08",
+   "silo1": 15000,
+   "silo2": null,
+   "silo3": 23500,
+   "silo4": 26000
+  },
+  {
+   "date": "2026-05-11",
+   "silo1": 14000,
+   "silo2": 17000,
+   "silo3": 21000,
+   "silo4": 22000
+  },
+  {
+   "date": "2026-05-15",
+   "silo1": 13000,
+   "silo2": 19000,
+   "silo3": 20000,
+   "silo4": null
+  },
+  {
+   "date": "2026-05-16",
+   "silo1": null,
+   "silo2": 3000,
+   "silo3": null,
+   "silo4": null
+  },
+  {
+   "date": "2026-05-18",
+   "silo1": 11000,
+   "silo2": 7000,
+   "silo3": 23000,
+   "silo4": 14500
+  },
+  {
+   "date": "2026-05-25",
+   "silo1": 19000,
+   "silo2": 10000,
+   "silo3": 21000,
+   "silo4": 11000
+  },
+  {
+   "date": "2026-05-29",
+   "silo1": 23000,
+   "silo2": 10000,
+   "silo3": 22500,
+   "silo4": 8000
+  },
+  {
+   "date": "2026-06-01",
+   "silo1": 21000,
+   "silo2": 1500,
+   "silo3": 24000,
+   "silo4": null
+  },
+  {
+   "date": "2026-06-05",
+   "silo1": 21000,
+   "silo2": 16000,
+   "silo3": 21000,
+   "silo4": 8000
+  },
+  {
+   "date": "2026-06-08",
+   "silo1": 18000,
+   "silo2": 15500,
+   "silo3": 23000,
+   "silo4": 5500
+  },
+  {
+   "date": "2026-06-12",
+   "silo1": 23500,
+   "silo2": 14500,
+   "silo3": 24000,
+   "silo4": 32000
+  },
+  {
+   "date": "2026-06-15",
+   "silo1": 23000,
+   "silo2": 8000,
+   "silo3": 20000,
+   "silo4": 30000
+  },
+  {
+   "date": "2026-06-17",
+   "silo1": 23000,
+   "silo2": 21000,
+   "silo3": 20000,
+   "silo4": null
+  },
+  {
+   "date": "2026-06-19",
+   "silo1": 23000,
+   "silo2": 10000,
+   "silo3": 23000,
+   "silo4": 25000
+  },
+  {
+   "date": "2026-06-22",
+   "silo1": 23000,
+   "silo2": 0,
+   "silo3": 20000,
+   "silo4": null
+  },
+  {
+   "date": "2026-06-24",
+   "silo1": 22500,
+   "silo2": 11000,
+   "silo3": 23500,
+   "silo4": null
+  },
+  {
+   "date": "2026-06-29",
+   "silo1": 16500,
+   "silo2": 1500,
+   "silo3": 22000,
+   "silo4": 16500
+  },
+  {
+   "date": "2026-07-03",
+   "silo1": 14500,
+   "silo2": 23500,
+   "silo3": 2400,
+   "silo4": 13500
+  },
+  {
+   "date": "2026-07-06",
+   "silo1": 10000,
+   "silo2": 16500,
+   "silo3": 22000,
+   "silo4": 11000
+  },
+  {
+   "date": "2026-07-12",
+   "silo1": 20000,
+   "silo2": 3500,
+   "silo3": 23500,
+   "silo4": null
+  },
+  {
+   "date": "2026-07-15",
+   "silo1": 18000,
+   "silo2": 23500,
+   "silo3": 23500,
+   "silo4": null
+  },
+  {
+   "date": "2026-07-17",
+   "silo1": 19000,
+   "silo2": 19000,
+   "silo3": 23500,
+   "silo4": 28000
+  },
+  {
+   "date": "2026-07-19",
+   "silo1": 15000,
+   "silo2": 6000,
+   "silo3": 23500,
+   "silo4": 27000
+  },
+  {
+   "date": "2026-07-24",
+   "silo1": 16000,
+   "silo2": 20000,
+   "silo3": 23500,
+   "silo4": null
+  },
+  {
+   "date": "2026-07-26",
+   "silo1": 16000,
+   "silo2": 12500,
+   "silo3": 23500,
+   "silo4": 26000
+  },
+  {
+   "date": "2026-07-31",
+   "silo1": 21000,
+   "silo2": 18000,
+   "silo3": 22000,
+   "silo4": null
+  },
+  {
+   "date": "2026-08-03",
+   "silo1": 19500,
+   "silo2": 3000,
+   "silo3": 24000,
+   "silo4": null
+  },
+  {
+   "date": "2026-08-05",
+   "silo1": 21000,
+   "silo2": 22000,
+   "silo3": 21000,
+   "silo4": 21000
+  },
+  {
+   "date": "2026-08-10",
+   "silo1": 16000,
+   "silo2": 4500,
+   "silo3": 23500,
+   "silo4": null
+  },
+  {
+   "date": "2026-08-13",
+   "silo1": 18000,
+   "silo2": 13500,
+   "silo3": 23500,
+   "silo4": null
+  },
+  {
+   "date": "2026-08-14",
+   "silo1": 18000,
+   "silo2": 7000,
+   "silo3": 23500,
+   "silo4": 15000
+  },
+  {
+   "date": "2026-08-17",
+   "silo1": 18000,
+   "silo2": 0,
+   "silo3": 20000,
+   "silo4": null
+  },
+  {
+   "date": "2026-08-21",
+   "silo1": 16000,
+   "silo2": 6000,
+   "silo3": 20000,
+   "silo4": 12500
+  },
+  {
+   "date": "2026-08-23",
+   "silo1": 13000,
+   "silo2": 20000,
+   "silo3": 1000,
+   "silo4": 12000
+  },
+  {
+   "date": "2026-08-27",
+   "silo1": 10000,
+   "silo2": 15500,
+   "silo3": 23500,
+   "silo4": 9000
+  },
+  {
+   "date": "2026-08-30",
+   "silo1": 23500,
+   "silo2": 23500,
+   "silo3": 21000,
+   "silo4": 9500
+  },
+  {
+   "date": "2026-09-02",
+   "silo1": null,
+   "silo2": null,
+   "silo3": null,
+   "silo4": 7000
+  },
+  {
+   "date": "2026-09-03",
+   "silo1": 21000,
+   "silo2": 13500,
+   "silo3": 23500,
+   "silo4": 7000
+  },
+  {
+   "date": "2026-09-07",
+   "silo1": 18000,
+   "silo2": 1500,
+   "silo3": 21000,
+   "silo4": 6000
+  },
+  {
+   "date": "2026-09-11",
+   "silo1": null,
+   "silo2": null,
+   "silo3": null,
+   "silo4": 23000
+  },
+  {
+   "date": "2026-09-14",
+   "silo1": 21000,
+   "silo2": 15500,
+   "silo3": 21000,
+   "silo4": null
+  },
+  {
+   "date": "2026-09-22",
+   "silo1": 21000,
+   "silo2": 11000,
+   "silo3": 21000,
+   "silo4": 18000
+  },
+  {
+   "date": "2026-09-25",
+   "silo1": 22000,
+   "silo2": 13500,
+   "silo3": 23500,
+   "silo4": null
+  },
+  {
+   "date": "2026-09-28",
+   "silo1": 21000,
+   "silo2": 1000,
+   "silo3": 22000,
+   "silo4": null
+  },
+  {
+   "date": "2026-09-30",
+   "silo1": 21000,
+   "silo2": 23000,
+   "silo3": 18000,
+   "silo4": 9000
+  },
+  {
+   "date": "2026-10-01",
+   "silo1": 20000,
+   "silo2": 11000,
+   "silo3": 22000,
+   "silo4": 7000
+  },
+  {
+   "date": "2026-10-06",
+   "silo1": 20000,
+   "silo2": null,
+   "silo3": 20000,
+   "silo4": 5500
+  }
+ ],
+ "deliveryLog": [
+  {
+   "group": "pool",
+   "date": "2025-09-16",
+   "qty": 24000,
+   "po": "PO17910 received"
+  },
+  {
+   "group": "pool",
+   "date": "2025-09-23",
+   "qty": 24000,
+   "po": "PO17923 Confirmed"
+  },
+  {
+   "group": "silo1",
+   "date": "2025-09-26",
+   "qty": 24000,
+   "po": "PO17987 confirmed"
+  },
+  {
+   "group": "pool",
+   "date": "2025-10-01",
+   "qty": 24000,
+   "po": "PO18046 Received"
+  },
+  {
+   "group": "pool",
+   "date": "2025-10-09",
+   "qty": 24000,
+   "po": "PO18097 received"
+  },
+  {
+   "group": "silo1",
+   "date": "2025-10-15",
+   "qty": 4000,
+   "po": "PO18174 Received"
+  },
+  {
+   "group": "pool",
+   "date": "2025-10-15",
+   "qty": 20000,
+   "po": "PO18174 Received"
+  },
+  {
+   "group": "silo4",
+   "date": "2025-10-16",
+   "qty": 26000,
+   "po": "PO18098 Confirmed"
+  },
+  {
+   "group": "pool",
+   "date": "2025-10-21",
+   "qty": 24000,
+   "po": "PO18226 Received"
+  },
+  {
+   "group": "silo1",
+   "date": "2025-10-24",
+   "qty": 14000,
+   "po": "PO18238 Confirmed."
+  },
+  {
+   "group": "pool",
+   "date": "2025-10-29",
+   "qty": 24000,
+   "po": "PO18279 Received"
+  },
+  {
+   "group": "pool",
+   "date": "2025-11-04",
+   "qty": 24000,
+   "po": "PO18336 Received"
+  },
+  {
+   "group": "silo1",
+   "date": "2025-11-07",
+   "qty": 11000,
+   "po": "PO18410 Received"
+  },
+  {
+   "group": "pool",
+   "date": "2025-11-07",
+   "qty": 13000,
+   "po": "PO18410 Received"
+  },
+  {
+   "group": "pool",
+   "date": "2025-11-13",
+   "qty": 24000,
+   "po": "PO18441 Received"
+  },
+  {
+   "group": "silo4",
+   "date": "2025-11-13",
+   "qty": 26000,
+   "po": "PO18337 Received"
+  },
+  {
+   "group": "pool",
+   "date": "2025-11-18",
+   "qty": 24000,
+   "po": "PO18490 Confirmed"
+  },
+  {
+   "group": "pool",
+   "date": "2025-11-21",
+   "qty": 24000,
+   "po": "PO18552 Received"
+  },
+  {
+   "group": "pool",
+   "date": "2025-12-03",
+   "qty": 24000,
+   "po": "PO18621 Received"
+  },
+  {
+   "group": "pool",
+   "date": "2025-12-09",
+   "qty": 24000,
+   "po": "PO18712 Receive"
+  },
+  {
+   "group": "silo4",
+   "date": "2025-12-11",
+   "qty": 26000,
+   "po": "PO18622 recieved"
+  },
+  {
+   "group": "pool",
+   "date": "2025-12-16",
+   "qty": 24000,
+   "po": "PO18789 Confirmed"
+  },
+  {
+   "group": "pool",
+   "date": "2025-12-23",
+   "qty": 24000,
+   "po": "PO18795 Confirmed"
+  },
+  {
+   "group": "silo1",
+   "date": "2025-12-31",
+   "qty": 10000,
+   "po": "PO18879 Recieved"
+  },
+  {
+   "group": "pool",
+   "date": "2025-12-31",
+   "qty": 14000,
+   "po": "PO18879 Recieved"
+  },
+  {
+   "group": "pool",
+   "date": "2026-01-15",
+   "qty": 24000,
+   "po": "PO19008 Received"
+  },
+  {
+   "group": "silo4",
+   "date": "2026-01-15",
+   "qty": 26000,
+   "po": "PO18881 Received"
+  },
+  {
+   "group": "pool",
+   "date": "2026-01-29",
+   "qty": 24000,
+   "po": "PO19120 Received"
+  },
+  {
+   "group": "pool",
+   "date": "2026-02-05",
+   "qty": 24000,
+   "po": "PO19199 Confirmed"
+  },
+  {
+   "group": "silo1",
+   "date": "2026-02-10",
+   "qty": 14000,
+   "po": "PO19252"
+  },
+  {
+   "group": "pool",
+   "date": "2026-02-10",
+   "qty": 10000,
+   "po": "PO19252"
+  },
+  {
+   "group": "silo1",
+   "date": "2026-02-17",
+   "qty": 4000,
+   "po": "PO19282"
+  },
+  {
+   "group": "pool",
+   "date": "2026-02-17",
+   "qty": 20000,
+   "po": "PO19282"
+  },
+  {
+   "group": "pool",
+   "date": "2026-02-25",
+   "qty": 24000,
+   "po": "PO19379"
+  },
+  {
+   "group": "silo4",
+   "date": "2026-03-12",
+   "qty": 26000,
+   "po": "PO19450"
+  },
+  {
+   "group": "pool",
+   "date": "2026-03-19",
+   "qty": 24000,
+   "po": ""
+  },
+  {
+   "group": "pool",
+   "date": "2026-03-26",
+   "qty": 24000,
+   "po": ""
+  },
+  {
+   "group": "pool",
+   "date": "2026-03-31",
+   "qty": 24000,
+   "po": "PO19715 Confirmed"
+  },
+  {
+   "group": "silo1",
+   "date": "2026-04-09",
+   "qty": 5500,
+   "po": "PO19779 Confirmed"
+  },
+  {
+   "group": "pool",
+   "date": "2026-04-09",
+   "qty": 18500,
+   "po": "PO19779 Confirmed"
+  },
+  {
+   "group": "pool",
+   "date": "2026-04-21",
+   "qty": 24000,
+   "po": "PO19846"
+  },
+  {
+   "group": "pool",
+   "date": "2026-04-28",
+   "qty": 24000,
+   "po": "PO19893"
+  },
+  {
+   "group": "pool",
+   "date": "2026-05-06",
+   "qty": 24000,
+   "po": "PO19952"
+  },
+  {
+   "group": "silo4",
+   "date": "2026-05-07",
+   "qty": 26000,
+   "po": "PO19953"
+  },
+  {
+   "group": "pool",
+   "date": "2026-05-08",
+   "qty": 24000,
+   "po": "PO20020"
+  },
+  {
+   "group": "pool",
+   "date": "2026-05-13",
+   "qty": 24000,
+   "po": "PO20102"
+  },
+  {
+   "group": "pool",
+   "date": "2026-05-19",
+   "qty": 24000,
+   "po": "PO20168"
+  },
+  {
+   "group": "silo1",
+   "date": "2026-05-22",
+   "qty": 8000,
+   "po": "PO20176"
+  },
+  {
+   "group": "pool",
+   "date": "2026-05-22",
+   "qty": 16000,
+   "po": "PO20176"
+  },
+  {
+   "group": "silo1",
+   "date": "2026-05-27",
+   "qty": 5000,
+   "po": "PO20249"
+  },
+  {
+   "group": "pool",
+   "date": "2026-05-27",
+   "qty": 19000,
+   "po": "PO20249"
+  },
+  {
+   "group": "pool",
+   "date": "2026-06-03",
+   "qty": 24000,
+   "po": "PO20346"
+  },
+  {
+   "group": "pool",
+   "date": "2026-06-23",
+   "qty": 24000,
+   "po": "PO20489"
+  },
+  {
+   "group": "pool",
+   "date": "2026-06-30",
+   "qty": 24000,
+   "po": "PO20585"
+  },
+  {
+   "group": "silo1",
+   "date": "2026-07-03",
+   "qty": 4000,
+   "po": "PO20635"
+  },
+  {
+   "group": "pool",
+   "date": "2026-07-03",
+   "qty": 20000,
+   "po": "PO20635"
+  },
+  {
+   "group": "silo1",
+   "date": "2026-07-07",
+   "qty": 7000,
+   "po": "PO20667"
+  },
+  {
+   "group": "pool",
+   "date": "2026-07-07",
+   "qty": 17000,
+   "po": "PO20667"
+  },
+  {
+   "group": "pool",
+   "date": "2026-07-14",
+   "qty": 24000,
+   "po": "PO20668"
+  },
+  {
+   "group": "silo4",
+   "date": "2026-07-16",
+   "qty": 26000,
+   "po": "PO20634"
+  },
+  {
+   "group": "silo1",
+   "date": "2026-07-21",
+   "qty": 1000,
+   "po": "PO20669"
+  },
+  {
+   "group": "pool",
+   "date": "2026-07-21",
+   "qty": 23000,
+   "po": "PO20669"
+  },
+  {
+   "group": "pool",
+   "date": "2026-07-28",
+   "qty": 24000,
+   "po": "PO20864"
+  },
+  {
+   "group": "pool",
+   "date": "2026-08-04",
+   "qty": 24000,
+   "po": "PO20871"
+  },
+  {
+   "group": "pool",
+   "date": "2026-08-11",
+   "qty": 24000,
+   "po": "PO20947"
+  },
+  {
+   "group": "pool",
+   "date": "2026-08-18",
+   "qty": 24000,
+   "po": "PO21012"
+  },
+  {
+   "group": "pool",
+   "date": "2026-08-25",
+   "qty": 24000,
+   "po": "PO21149"
+  },
+  {
+   "group": "silo1",
+   "date": "2026-08-28",
+   "qty": 12000,
+   "po": "PO21254"
+  },
+  {
+   "group": "pool",
+   "date": "2026-08-28",
+   "qty": 12000,
+   "po": "PO21254"
+  },
+  {
+   "group": "pool",
+   "date": "2026-09-08",
+   "qty": 24000,
+   "po": "PO21266"
+  },
+  {
+   "group": "silo4",
+   "date": "2026-09-10",
+   "qty": 26000,
+   "po": "PO21150"
+  },
+  {
+   "group": "pool",
+   "date": "2026-09-11",
+   "qty": 24000,
+   "po": "PO21307"
+  },
+  {
+   "group": "pool",
+   "date": "2026-09-18",
+   "qty": 24000,
+   "po": "PO21380"
+  },
+  {
+   "group": "silo1",
+   "date": "2026-09-23",
+   "qty": 1000,
+   "po": "PO21456"
+  },
+  {
+   "group": "pool",
+   "date": "2026-09-23",
+   "qty": 23000,
+   "po": "PO21456"
+  },
+  {
+   "group": "pool",
+   "date": "2026-10-07",
+   "qty": 24000,
+   "po": "PO21555"
+  },
+  {
+   "group": "silo4",
+   "date": "2026-10-08",
+   "qty": 26000,
+   "po": "PO21458"
+  },
+  {
+   "group": "pool",
+   "date": "2026-10-13",
+   "qty": 24000,
+   "po": "PO21556"
+  },
+  {
+   "group": "silo1",
+   "date": "2026-10-16",
+   "qty": 6000,
+   "po": "PO21635"
+  },
+  {
+   "group": "pool",
+   "date": "2026-10-16",
+   "qty": 18000,
+   "po": "PO21635"
+  },
+  {
+   "group": "pool",
+   "date": "2026-10-22",
+   "qty": 24000,
+   "po": "PO21636"
+  },
+  {
+   "group": "pool",
+   "date": "2026-10-28",
+   "qty": 24000,
+   "po": ""
+  }
+ ],
  "schedule": {
   "dates": [
+   "2026-07-28",
+   "2026-07-29",
+   "2026-07-30",
+   "2026-07-31",
+   "2026-08-01",
+   "2026-08-02",
+   "2026-08-03",
+   "2026-08-04",
+   "2026-08-05",
+   "2026-08-06",
+   "2026-08-07",
+   "2026-08-08",
+   "2026-08-09",
+   "2026-08-10",
+   "2026-08-11",
+   "2026-08-12",
+   "2026-08-13",
+   "2026-08-14",
+   "2026-08-15",
+   "2026-08-16",
+   "2026-08-17",
+   "2026-08-18",
+   "2026-08-19",
+   "2026-08-20",
+   "2026-08-21",
+   "2026-08-22",
+   "2026-08-23",
+   "2026-08-24",
+   "2026-08-25",
+   "2026-08-26",
+   "2026-08-27",
+   "2026-08-28",
+   "2026-08-29",
+   "2026-08-30",
+   "2026-08-31",
+   "2026-09-01",
+   "2026-09-02",
+   "2026-09-03",
+   "2026-09-04",
+   "2026-09-05",
+   "2026-09-06",
+   "2026-09-07",
+   "2026-09-08",
+   "2026-09-09",
+   "2026-09-10",
+   "2026-09-11",
+   "2026-09-12",
+   "2026-09-13",
+   "2026-09-14",
+   "2026-09-15",
+   "2026-09-16",
+   "2026-09-17",
+   "2026-09-18",
+   "2026-09-19",
+   "2026-09-20",
+   "2026-09-21",
+   "2026-09-22",
+   "2026-09-23",
+   "2026-09-24",
+   "2026-09-25",
+   "2026-09-26",
+   "2026-09-27",
+   "2026-09-28",
+   "2026-09-29",
+   "2026-09-30",
+   "2026-10-01",
    "2026-10-02",
    "2026-10-03",
    "2026-10-04",
@@ -111,9 +1468,752 @@
    "2026-10-12",
    "2026-10-13",
    "2026-10-14",
-   "2026-10-15"
+   "2026-10-15",
+   "2026-10-16",
+   "2026-10-17",
+   "2026-10-18",
+   "2026-10-19",
+   "2026-10-20",
+   "2026-10-21",
+   "2026-10-22",
+   "2026-10-23",
+   "2026-10-24",
+   "2026-10-25",
+   "2026-10-26",
+   "2026-10-27",
+   "2026-10-28",
+   "2026-10-29",
+   "2026-10-30",
+   "2026-10-31",
+   "2026-11-01"
   ],
   "brews": [
+   {
+    "date": "2026-07-28",
+    "system": "Krones",
+    "code": "EAZY",
+    "brews": 4
+   },
+   {
+    "date": "2026-07-29",
+    "system": "DME",
+    "code": "BLACK",
+    "brews": 1
+   },
+   {
+    "date": "2026-07-29",
+    "system": "DME",
+    "code": "BLACK",
+    "brews": 1
+   },
+   {
+    "date": "2026-07-29",
+    "system": "Krones",
+    "code": "HAZY",
+    "brews": 2
+   },
+   {
+    "date": "2026-07-29",
+    "system": "Krones",
+    "code": "HAZY",
+    "brews": 4
+   },
+   {
+    "date": "2026-07-30",
+    "system": "DME",
+    "code": "BLACK",
+    "brews": 1
+   },
+   {
+    "date": "2026-07-30",
+    "system": "DME",
+    "code": "BLACK",
+    "brews": 1
+   },
+   {
+    "date": "2026-07-30",
+    "system": "Krones",
+    "code": "HAZY",
+    "brews": 2
+   },
+   {
+    "date": "2026-07-30",
+    "system": "Krones",
+    "code": "EAZY",
+    "brews": 4
+   },
+   {
+    "date": "2026-07-31",
+    "system": "DME",
+    "code": "IPA",
+    "brews": 2
+   },
+   {
+    "date": "2026-07-31",
+    "system": "Krones",
+    "code": "XPA",
+    "brews": 6
+   },
+   {
+    "date": "2026-08-01",
+    "system": "Krones",
+    "code": "EAZY",
+    "brews": 6
+   },
+   {
+    "date": "2026-08-02",
+    "system": "Krones",
+    "code": "CPT",
+    "brews": 6
+   },
+   {
+    "date": "2026-08-03",
+    "system": "DME",
+    "code": "LPA",
+    "brews": 2
+   },
+   {
+    "date": "2026-08-03",
+    "system": "Krones",
+    "code": "XPA",
+    "brews": 6
+   },
+   {
+    "date": "2026-08-04",
+    "system": "DME",
+    "code": "LPA",
+    "brews": 2
+   },
+   {
+    "date": "2026-08-04",
+    "system": "Krones",
+    "code": "XPA",
+    "brews": 6
+   },
+   {
+    "date": "2026-08-05",
+    "system": "DME",
+    "code": "IPA",
+    "brews": 2
+   },
+   {
+    "date": "2026-08-05",
+    "system": "Krones",
+    "code": "EAZY",
+    "brews": 4
+   },
+   {
+    "date": "2026-08-07",
+    "system": "Krones",
+    "code": "HAZY",
+    "brews": 4
+   },
+   {
+    "date": "2026-08-07",
+    "system": "Krones",
+    "code": "GBSUB",
+    "brews": 1
+   },
+   {
+    "date": "2026-08-08",
+    "system": "DME",
+    "code": "IPA",
+    "brews": 2
+   },
+   {
+    "date": "2026-08-08",
+    "system": "Krones",
+    "code": "XPA",
+    "brews": 6
+   },
+   {
+    "date": "2026-08-09",
+    "system": "DME",
+    "code": "CPT",
+    "brews": 2
+   },
+   {
+    "date": "2026-08-09",
+    "system": "Krones",
+    "code": "HAZY",
+    "brews": 4
+   },
+   {
+    "date": "2026-08-10",
+    "system": "DME",
+    "code": "BLACK",
+    "brews": 1
+   },
+   {
+    "date": "2026-08-10",
+    "system": "DME",
+    "code": "LAGER",
+    "brews": 1
+   },
+   {
+    "date": "2026-08-10",
+    "system": "Krones",
+    "code": "EAZY",
+    "brews": 4
+   },
+   {
+    "date": "2026-08-11",
+    "system": "DME",
+    "code": "BLACK",
+    "brews": 1
+   },
+   {
+    "date": "2026-08-11",
+    "system": "DME",
+    "code": "LAGER",
+    "brews": 1
+   },
+   {
+    "date": "2026-08-11",
+    "system": "Krones",
+    "code": "EAZY",
+    "brews": 6
+   },
+   {
+    "date": "2026-08-12",
+    "system": "DME",
+    "code": "IPA",
+    "brews": 2
+   },
+   {
+    "date": "2026-08-12",
+    "system": "Krones",
+    "code": "XPA",
+    "brews": 6
+   },
+   {
+    "date": "2026-08-13",
+    "system": "DME",
+    "code": "CPT",
+    "brews": 2
+   },
+   {
+    "date": "2026-08-13",
+    "system": "Krones",
+    "code": "XPA",
+    "brews": 6
+   },
+   {
+    "date": "2026-08-14",
+    "system": "Krones",
+    "code": "EAZY",
+    "brews": 4
+   },
+   {
+    "date": "2026-08-15",
+    "system": "Krones",
+    "code": "EAZY",
+    "brews": 4
+   },
+   {
+    "date": "2026-08-16",
+    "system": "Krones",
+    "code": "XPA",
+    "brews": 6
+   },
+   {
+    "date": "2026-08-17",
+    "system": "DME",
+    "code": "LPA",
+    "brews": 2
+   },
+   {
+    "date": "2026-08-17",
+    "system": "Krones",
+    "code": "EAZY",
+    "brews": 4
+   },
+   {
+    "date": "2026-08-17",
+    "system": "Krones",
+    "code": "GBSUB",
+    "brews": 1
+   },
+   {
+    "date": "2026-08-18",
+    "system": "Krones",
+    "code": "HAZY",
+    "brews": 4
+   },
+   {
+    "date": "2026-08-19",
+    "system": "Krones",
+    "code": "HAZY",
+    "brews": 4
+   },
+   {
+    "date": "2026-08-20",
+    "system": "Krones",
+    "code": "EAZY",
+    "brews": 6
+   },
+   {
+    "date": "2026-08-21",
+    "system": "DME",
+    "code": "BLACK",
+    "brews": 1
+   },
+   {
+    "date": "2026-08-21",
+    "system": "DME",
+    "code": "BLACK",
+    "brews": 1
+   },
+   {
+    "date": "2026-08-21",
+    "system": "Krones",
+    "code": "CPT",
+    "brews": 6
+   },
+   {
+    "date": "2026-08-22",
+    "system": "DME",
+    "code": "BLACK",
+    "brews": 1
+   },
+   {
+    "date": "2026-08-22",
+    "system": "DME",
+    "code": "BLACK",
+    "brews": 1
+   },
+   {
+    "date": "2026-08-22",
+    "system": "Krones",
+    "code": "XPA",
+    "brews": 6
+   },
+   {
+    "date": "2026-08-23",
+    "system": "DME",
+    "code": "LPA",
+    "brews": 2
+   },
+   {
+    "date": "2026-08-23",
+    "system": "Krones",
+    "code": "GBWAY",
+    "brews": 4
+   },
+   {
+    "date": "2026-08-24",
+    "system": "DME",
+    "code": "BLACK",
+    "brews": 1
+   },
+   {
+    "date": "2026-08-24",
+    "system": "DME",
+    "code": "BLACK",
+    "brews": 1
+   },
+   {
+    "date": "2026-08-25",
+    "system": "DME",
+    "code": "BLACK",
+    "brews": 1
+   },
+   {
+    "date": "2026-08-25",
+    "system": "DME",
+    "code": "BLACK",
+    "brews": 1
+   },
+   {
+    "date": "2026-08-25",
+    "system": "Krones",
+    "code": "CPT",
+    "brews": 6
+   },
+   {
+    "date": "2026-08-26",
+    "system": "Krones",
+    "code": "XPA",
+    "brews": 6
+   },
+   {
+    "date": "2026-08-27",
+    "system": "DME",
+    "code": "DOLCITA",
+    "brews": 2
+   },
+   {
+    "date": "2026-08-27",
+    "system": "Krones",
+    "code": "EAZY",
+    "brews": 4
+   },
+   {
+    "date": "2026-08-29",
+    "system": "DME",
+    "code": "LPA",
+    "brews": 2
+   },
+   {
+    "date": "2026-08-30",
+    "system": "DME",
+    "code": "IPA",
+    "brews": 2
+   },
+   {
+    "date": "2026-08-30",
+    "system": "Krones",
+    "code": "EAZY",
+    "brews": 4
+   },
+   {
+    "date": "2026-08-31",
+    "system": "Krones",
+    "code": "HAZY",
+    "brews": 4
+   },
+   {
+    "date": "2026-08-31",
+    "system": "Krones",
+    "code": "GBSUB",
+    "brews": 1
+   },
+   {
+    "date": "2026-09-01",
+    "system": "DME",
+    "code": "IPA",
+    "brews": 2
+   },
+   {
+    "date": "2026-09-01",
+    "system": "Krones",
+    "code": "XPA",
+    "brews": 6
+   },
+   {
+    "date": "2026-09-02",
+    "system": "DME",
+    "code": "LPA",
+    "brews": 2
+   },
+   {
+    "date": "2026-09-02",
+    "system": "Krones",
+    "code": "CPT",
+    "brews": 6
+   },
+   {
+    "date": "2026-09-03",
+    "system": "DME",
+    "code": "IPA",
+    "brews": 2
+   },
+   {
+    "date": "2026-09-03",
+    "system": "Krones",
+    "code": "HAZY",
+    "brews": 4
+   },
+   {
+    "date": "2026-09-05",
+    "system": "Krones",
+    "code": "EAZY",
+    "brews": 4
+   },
+   {
+    "date": "2026-09-06",
+    "system": "Krones",
+    "code": "XPA",
+    "brews": 6
+   },
+   {
+    "date": "2026-09-07",
+    "system": "DME",
+    "code": "LPA",
+    "brews": 2
+   },
+   {
+    "date": "2026-09-07",
+    "system": "Krones",
+    "code": "EAZY",
+    "brews": 6
+   },
+   {
+    "date": "2026-09-08",
+    "system": "DME",
+    "code": "CPT",
+    "brews": 2
+   },
+   {
+    "date": "2026-09-08",
+    "system": "Krones",
+    "code": "XPA",
+    "brews": 6
+   },
+   {
+    "date": "2026-09-09",
+    "system": "DME",
+    "code": "CPT",
+    "brews": 2
+   },
+   {
+    "date": "2026-09-09",
+    "system": "Krones",
+    "code": "XPA",
+    "brews": 6
+   },
+   {
+    "date": "2026-09-10",
+    "system": "DME",
+    "code": "IPA",
+    "brews": 2
+   },
+   {
+    "date": "2026-09-10",
+    "system": "Krones",
+    "code": "EAZY",
+    "brews": 4
+   },
+   {
+    "date": "2026-09-10",
+    "system": "Krones",
+    "code": "EAZY",
+    "brews": 2
+   },
+   {
+    "date": "2026-09-11",
+    "system": "Krones",
+    "code": "HAZY",
+    "brews": 4
+   },
+   {
+    "date": "2026-09-11",
+    "system": "Krones",
+    "code": "EAZY",
+    "brews": 2
+   },
+   {
+    "date": "2026-09-12",
+    "system": "Krones",
+    "code": "XPA",
+    "brews": 6
+   },
+   {
+    "date": "2026-09-13",
+    "system": "Krones",
+    "code": "EAZY",
+    "brews": 6
+   },
+   {
+    "date": "2026-09-15",
+    "system": "DME",
+    "code": "IPA",
+    "brews": 1
+   },
+   {
+    "date": "2026-09-15",
+    "system": "Krones",
+    "code": "XPA",
+    "brews": 6
+   },
+   {
+    "date": "2026-09-16",
+    "system": "Krones",
+    "code": "XPA",
+    "brews": 6
+   },
+   {
+    "date": "2026-09-17",
+    "system": "DME",
+    "code": "IPA",
+    "brews": 2
+   },
+   {
+    "date": "2026-09-17",
+    "system": "Krones",
+    "code": "HAZY",
+    "brews": 4
+   },
+   {
+    "date": "2026-09-17",
+    "system": "Krones",
+    "code": "EAZY",
+    "brews": 2
+   },
+   {
+    "date": "2026-09-18",
+    "system": "Krones",
+    "code": "EAZY",
+    "brews": 4
+   },
+   {
+    "date": "2026-09-18",
+    "system": "Krones",
+    "code": "EAZY",
+    "brews": 2
+   },
+   {
+    "date": "2026-09-19",
+    "system": "Krones",
+    "code": "XPA",
+    "brews": 6
+   },
+   {
+    "date": "2026-09-20",
+    "system": "Krones",
+    "code": "XPA",
+    "brews": 6
+   },
+   {
+    "date": "2026-09-21",
+    "system": "Krones",
+    "code": "CPT",
+    "brews": 1
+   },
+   {
+    "date": "2026-09-21",
+    "system": "Krones",
+    "code": "EAZY",
+    "brews": 4
+   },
+   {
+    "date": "2026-09-22",
+    "system": "DME",
+    "code": "IPA",
+    "brews": 2
+   },
+   {
+    "date": "2026-09-22",
+    "system": "Krones",
+    "code": "LPA",
+    "brews": 1
+   },
+   {
+    "date": "2026-09-22",
+    "system": "Krones",
+    "code": "HAZY",
+    "brews": 4
+   },
+   {
+    "date": "2026-09-23",
+    "system": "DME",
+    "code": "IPA",
+    "brews": 2
+   },
+   {
+    "date": "2026-09-23",
+    "system": "Krones",
+    "code": "XPA",
+    "brews": 6
+   },
+   {
+    "date": "2026-09-24",
+    "system": "DME",
+    "code": "BLACK",
+    "brews": 1
+   },
+   {
+    "date": "2026-09-24",
+    "system": "DME",
+    "code": "BLACK",
+    "brews": 1
+   },
+   {
+    "date": "2026-09-24",
+    "system": "Krones",
+    "code": "XPA",
+    "brews": 6
+   },
+   {
+    "date": "2026-09-25",
+    "system": "DME",
+    "code": "BLACK",
+    "brews": 1
+   },
+   {
+    "date": "2026-09-25",
+    "system": "DME",
+    "code": "BLACK",
+    "brews": 1
+   },
+   {
+    "date": "2026-09-25",
+    "system": "Krones",
+    "code": "XPA",
+    "brews": 6
+   },
+   {
+    "date": "2026-09-26",
+    "system": "DME",
+    "code": "CPT",
+    "brews": 2
+   },
+   {
+    "date": "2026-09-26",
+    "system": "Krones",
+    "code": "EAZY",
+    "brews": 4
+   },
+   {
+    "date": "2026-09-26",
+    "system": "Krones",
+    "code": "EAZY",
+    "brews": 2
+   },
+   {
+    "date": "2026-09-27",
+    "system": "Krones",
+    "code": "HAZY",
+    "brews": 4
+   },
+   {
+    "date": "2026-09-27",
+    "system": "Krones",
+    "code": "EAZY",
+    "brews": 2
+   },
+   {
+    "date": "2026-09-28",
+    "system": "Krones",
+    "code": "XPA",
+    "brews": 6
+   },
+   {
+    "date": "2026-09-29",
+    "system": "DME",
+    "code": "BLACK",
+    "brews": 1
+   },
+   {
+    "date": "2026-09-29",
+    "system": "DME",
+    "code": "BLACK",
+    "brews": 1
+   },
+   {
+    "date": "2026-09-29",
+    "system": "Krones",
+    "code": "XPA",
+    "brews": 6
+   },
+   {
+    "date": "2026-09-30",
+    "system": "DME",
+    "code": "BLACK",
+    "brews": 1
+   },
+   {
+    "date": "2026-09-30",
+    "system": "DME",
+    "code": "BLACK",
+    "brews": 1
+   },
+   {
+    "date": "2026-09-30",
+    "system": "Krones",
+    "code": "XPA",
+    "brews": 6
+   },
    {
     "date": "2026-10-02",
     "system": "Krones",
@@ -131,6 +2231,12 @@
     "system": "Krones",
     "code": "EAZY",
     "brews": 4
+   },
+   {
+    "date": "2026-10-03",
+    "system": "Krones",
+    "code": "LPA",
+    "brews": 1
    },
    {
     "date": "2026-10-03",
@@ -149,12 +2255,6 @@
     "system": "Krones",
     "code": "XPA",
     "brews": 6
-   },
-   {
-    "date": "2026-10-05",
-    "system": "Krones",
-    "code": "GBWIND",
-    "brews": 5
    },
    {
     "date": "2026-10-05",
@@ -274,13 +2374,13 @@
     "date": "2026-10-13",
     "system": "Krones",
     "code": "HAZY",
-    "brews": 4
+    "brews": 2
    },
    {
     "date": "2026-10-13",
     "system": "Krones",
     "code": "HAZY",
-    "brews": 2
+    "brews": 4
    },
    {
     "date": "2026-10-14",
@@ -297,14 +2397,14 @@
    {
     "date": "2026-10-14",
     "system": "Krones",
-    "code": "EAZY",
-    "brews": 4
+    "code": "HAZY",
+    "brews": 2
    },
    {
     "date": "2026-10-14",
     "system": "Krones",
-    "code": "HAZY",
-    "brews": 2
+    "code": "EAZY",
+    "brews": 4
    },
    {
     "date": "2026-10-15",
@@ -323,9 +2423,313 @@
     "system": "Krones",
     "code": "CPT",
     "brews": 6
+   },
+   {
+    "date": "2026-10-16",
+    "system": "DME",
+    "code": "CPT",
+    "brews": 2
+   },
+   {
+    "date": "2026-10-16",
+    "system": "Krones",
+    "code": "XPA",
+    "brews": 6
+   },
+   {
+    "date": "2026-10-17",
+    "system": "Krones",
+    "code": "EAZY",
+    "brews": 1
+   },
+   {
+    "date": "2026-10-17",
+    "system": "Krones",
+    "code": "EAZY",
+    "brews": 1
+   },
+   {
+    "date": "2026-10-17",
+    "system": "Krones",
+    "code": "EAZY",
+    "brews": 4
+   },
+   {
+    "date": "2026-10-18",
+    "system": "Krones",
+    "code": "EAZY",
+    "brews": 6
+   },
+   {
+    "date": "2026-10-19",
+    "system": "DME",
+    "code": "IPA",
+    "brews": 2
+   },
+   {
+    "date": "2026-10-19",
+    "system": "Krones",
+    "code": "XPA",
+    "brews": 6
+   },
+   {
+    "date": "2026-10-20",
+    "system": "DME",
+    "code": "IPA",
+    "brews": 2
+   },
+   {
+    "date": "2026-10-20",
+    "system": "Krones",
+    "code": "XPA",
+    "brews": 6
+   },
+   {
+    "date": "2026-10-21",
+    "system": "DME",
+    "code": "LPA",
+    "brews": 2
+   },
+   {
+    "date": "2026-10-21",
+    "system": "Krones",
+    "code": "EAZY",
+    "brews": 4
+   },
+   {
+    "date": "2026-10-21",
+    "system": "Krones",
+    "code": "EAZY",
+    "brews": 2
+   },
+   {
+    "date": "2026-10-22",
+    "system": "DME",
+    "code": "BLACK",
+    "brews": 1
+   },
+   {
+    "date": "2026-10-22",
+    "system": "DME",
+    "code": "BLACK",
+    "brews": 1
+   },
+   {
+    "date": "2026-10-22",
+    "system": "Krones",
+    "code": "EAZY",
+    "brews": 4
+   },
+   {
+    "date": "2026-10-22",
+    "system": "Krones",
+    "code": "EAZY",
+    "brews": 2
+   },
+   {
+    "date": "2026-10-23",
+    "system": "DME",
+    "code": "BLACK",
+    "brews": 1
+   },
+   {
+    "date": "2026-10-23",
+    "system": "DME",
+    "code": "BLACK",
+    "brews": 1
+   },
+   {
+    "date": "2026-10-23",
+    "system": "Krones",
+    "code": "CPT",
+    "brews": 6
+   },
+   {
+    "date": "2026-10-24",
+    "system": "DME",
+    "code": "IPA",
+    "brews": 2
+   },
+   {
+    "date": "2026-10-24",
+    "system": "Krones",
+    "code": "XPA",
+    "brews": 6
+   },
+   {
+    "date": "2026-10-25",
+    "system": "DME",
+    "code": "LPA",
+    "brews": 2
+   },
+   {
+    "date": "2026-10-25",
+    "system": "Krones",
+    "code": "XPA",
+    "brews": 6
+   },
+   {
+    "date": "2026-10-26",
+    "system": "DME",
+    "code": "BLACK",
+    "brews": 1
+   },
+   {
+    "date": "2026-10-26",
+    "system": "Krones",
+    "code": "HAZY",
+    "brews": 4
+   },
+   {
+    "date": "2026-10-26",
+    "system": "Krones",
+    "code": "HAZY",
+    "brews": 2
+   },
+   {
+    "date": "2026-10-27",
+    "system": "DME",
+    "code": "BLACK",
+    "brews": 1
+   },
+   {
+    "date": "2026-10-27",
+    "system": "Krones",
+    "code": "HAZY",
+    "brews": 4
+   },
+   {
+    "date": "2026-10-27",
+    "system": "Krones",
+    "code": "HAZY",
+    "brews": 2
+   },
+   {
+    "date": "2026-10-28",
+    "system": "DME",
+    "code": "IPA",
+    "brews": 2
+   },
+   {
+    "date": "2026-10-28",
+    "system": "Krones",
+    "code": "EAZY",
+    "brews": 6
+   },
+   {
+    "date": "2026-10-29",
+    "system": "DME",
+    "code": "LPA",
+    "brews": 2
+   },
+   {
+    "date": "2026-10-30",
+    "system": "DME",
+    "code": "LPA",
+    "brews": 2
+   },
+   {
+    "date": "2026-10-30",
+    "system": "Krones",
+    "code": "XPA",
+    "brews": 6
+   },
+   {
+    "date": "2026-10-31",
+    "system": "DME",
+    "code": "IPA",
+    "brews": 2
+   },
+   {
+    "date": "2026-10-31",
+    "system": "Krones",
+    "code": "XPA",
+    "brews": 6
+   },
+   {
+    "date": "2026-11-01",
+    "system": "DME",
+    "code": "IPA",
+    "brews": 2
+   },
+   {
+    "date": "2026-11-01",
+    "system": "Krones",
+    "code": "XPA",
+    "brews": 6
    }
   ],
   "skipped": [
+   {
+    "date": "2026-08-05",
+    "system": "DME",
+    "text": "DME - PFV2"
+   },
+   {
+    "date": "2026-08-05",
+    "system": "Krones",
+    "text": "Lauter Water CIP"
+   },
+   {
+    "date": "2026-08-05",
+    "system": "Krones",
+    "text": "Turn boilers off."
+   },
+   {
+    "date": "2026-08-06",
+    "system": "DME",
+    "text": "TIP / GMP / Cleaning and Maintenance"
+   },
+   {
+    "date": "2026-08-27",
+    "system": "DME",
+    "text": "Boiler service"
+   },
+   {
+    "date": "2026-08-28",
+    "system": "DME",
+    "text": "GC SHOWDAY"
+   },
+   {
+    "date": "2026-08-28",
+    "system": "Krones",
+    "text": "GC SHOWDAY"
+   },
+   {
+    "date": "2026-09-03",
+    "system": "Krones",
+    "text": "Lauter water CIP"
+   },
+   {
+    "date": "2026-09-04",
+    "system": "DME",
+    "text": "TIP / GMP / Cleaning and Maintenance"
+   },
+   {
+    "date": "2026-09-04",
+    "system": "Krones",
+    "text": "Check Krones brewhouse Bearings"
+   },
+   {
+    "date": "2026-09-14",
+    "system": "DME",
+    "text": "scales service"
+   },
+   {
+    "date": "2026-09-14",
+    "system": "Krones",
+    "text": "scales service"
+   },
+   {
+    "date": "2026-09-16",
+    "system": "Krones",
+    "text": "9.43"
+   },
+   {
+    "date": "2026-09-20",
+    "system": "DME",
+    "text": "NO BREWING"
+   },
    {
     "date": "2026-10-05",
     "system": "DME",
@@ -336,312 +2740,7 @@
     "system": "Krones",
     "text": "KINGS BDAY"
    }
-  ]
- },
- "chemicals": [
-  {
-   "id": "bru-solv-1000lt-schutz-21378",
-   "name": "Bru-Solv 1000LT SCHUTZ 21378",
-   "description": "Bulk caustic detergent 1000L",
-   "supplier": "Ecolab",
-   "min": 5,
-   "seedCount": 7,
-   "rule": "topup+1",
-   "unit": "units",
-   "storage": "1 on M/D tank, 1 on 1100L Bund, 2 on caustic storage racking over permanent bund",
-   "discontinued": false,
-   "notes": []
-  },
-  {
-   "id": "super-stonekleen",
-   "name": "Super StoneKleen",
-   "description": "High Nitric Acid CIP Detergent",
-   "supplier": "Ecolab",
-   "min": 6,
-   "seedCount": 9,
-   "rule": "topup",
-   "unit": "units",
-   "storage": "shared 550L bund",
-   "discontinued": false,
-   "notes": []
-  },
-  {
-   "id": "trimeta-psf",
-   "name": "Trimeta PSF",
-   "description": "Nitric/Phosphoric Acid Detergent",
-   "supplier": "Ecolab",
-   "min": 5,
-   "seedCount": 5,
-   "rule": "topup+1",
-   "unit": "units",
-   "storage": "",
-   "discontinued": false,
-   "notes": []
-  },
-  {
-   "id": "lactic-acid",
-   "name": "Lactic Acid",
-   "description": "Food Grade Processing Aid - Brewhouse",
-   "supplier": "Sopura",
-   "min": 15,
-   "seedCount": 19,
-   "rule": "topup",
-   "unit": "units",
-   "storage": "Stored on a 550L bund behind CR2",
-   "discontinued": false,
-   "notes": []
-  },
-  {
-   "id": "topax-686-15-lt",
-   "name": "Topax 686 15 LT",
-   "description": "Foaming Chlorinated Detergent Sanitiser",
-   "supplier": "Ecolab",
-   "min": 10,
-   "seedCount": 10,
-   "rule": "topup",
-   "unit": "units",
-   "storage": "1 IBC stored on Caustic storage bund",
-   "discontinued": false,
-   "notes": []
-  },
-  {
-   "id": "alcohol-70-commercial-15lt-5149301",
-   "name": "Alcohol 70% Commercial 15LT 5149301",
-   "description": "70% Alcohol Solution",
-   "supplier": "Ecolab",
-   "min": 8,
-   "seedCount": 10,
-   "rule": "topup",
-   "unit": "units",
-   "storage": "stored separately on small bund located amongst acids",
-   "discontinued": false,
-   "notes": []
-  },
-  {
-   "id": "synergex-1000l",
-   "name": "Synergex 1000L",
-   "description": "5% Peracetic Acid",
-   "supplier": "Ecolab",
-   "min": 0.3,
-   "seedCount": 10,
-   "rule": "one",
-   "unit": "units",
-   "storage": "Oxidising acids stored separate from all other chems on extra large bund",
-   "discontinued": false,
-   "notes": [
-    "Min stock and count look like different units in ST26. Check before relying on this line."
-   ]
-  },
-  {
-   "id": "synergex-15-l",
-   "name": "Synergex 15 L",
-   "description": "PAA 1/2 Strength",
-   "supplier": "Ecolab",
-   "min": 3,
-   "seedCount": 2,
-   "rule": "topup",
-   "unit": "units",
-   "storage": "",
-   "discontinued": false,
-   "notes": []
-  },
-  {
-   "id": "22309plus-11h",
-   "name": "22309PLUS.11H",
-   "description": "Tannin Based Boiler Treatment",
-   "supplier": "Nalco",
-   "min": 2,
-   "seedCount": 0,
-   "rule": "topup",
-   "unit": "units",
-   "storage": "stored on small bund located amongst acids",
-   "discontinued": false,
-   "notes": []
-  },
-  {
-   "id": "acid700",
-   "name": "ACID700",
-   "description": "Water Treatment Acid (1000L IBC)",
-   "supplier": "Nalco",
-   "min": 0.45,
-   "seedCount": 0.38,
-   "rule": "topup",
-   "unit": "tank%",
-   "storage": "1 in use at DME TW, 1 in storage in acid area",
-   "discontinued": false,
-   "notes": []
-  },
-  {
-   "id": "alks500",
-   "name": "ALKS500",
-   "description": "Water Treatment Caustic (1000L IBC)",
-   "supplier": "Nalco",
-   "min": 0.3,
-   "seedCount": 0.27,
-   "rule": "topup",
-   "unit": "tank%",
-   "storage": "1 in use at DME TW, 1 in storage in caustic racking area",
-   "discontinued": false,
-   "notes": []
-  },
-  {
-   "id": "octave-fs",
-   "name": "Octave FS",
-   "description": "Foaming acid for external tank cleaning 25L",
-   "supplier": "Ecolab",
-   "min": 2,
-   "seedCount": 2,
-   "rule": "topup",
-   "unit": "units",
-   "storage": "stored separately on small bund located amongst acids",
-   "discontinued": false,
-   "notes": []
-  },
-  {
-   "id": "liquid-cip-cleaner",
-   "name": "Liquid CIP Cleaner",
-   "description": "Caustic for keg washing (suitable for CO2)",
-   "supplier": "Ecolab",
-   "min": 1,
-   "seedCount": 1,
-   "rule": "topup",
-   "unit": "units",
-   "storage": "1 x 200L drum stored on caustic racking",
-   "discontinued": false,
-   "notes": []
-  },
-  {
-   "id": "cellarwash",
-   "name": "Cellarwash",
-   "description": "Acid for keg washing (suitable for CO2) 1000L",
-   "supplier": "Ecolab",
-   "min": 1,
-   "seedCount": 1,
-   "rule": "topup",
-   "unit": "units",
-   "storage": "1 on M/D tank, 2 on 1100L bunds",
-   "discontinued": true,
-   "notes": []
-  },
-  {
-   "id": "sanimaxx",
-   "name": "SaniMaxx",
-   "description": "Detergent for the Canning Line Belts 15L",
-   "supplier": "Ecolab",
-   "min": 3,
-   "seedCount": 4,
-   "rule": "topup",
-   "unit": "units",
-   "storage": "stored on small bund located amongst acids",
-   "discontinued": false,
-   "notes": []
-  },
-  {
-   "id": "envirosan",
-   "name": "EnviroSan",
-   "description": "Sani bath sanitising detergent 25L",
-   "supplier": "Ecolab",
-   "min": 2,
-   "seedCount": 13,
-   "rule": "topup",
-   "unit": "units",
-   "storage": "stored on small bund located amongst acids",
-   "discontinued": false,
-   "notes": []
-  },
-  {
-   "id": "lubodrive",
-   "name": "LuboDrive",
-   "description": "keg line conveyor lube",
-   "supplier": "Ecolab",
-   "min": 1,
-   "seedCount": 3,
-   "rule": "topup",
-   "unit": "units",
-   "storage": "stored on small bund located amongst acids",
-   "discontinued": false,
-   "notes": []
-  },
-  {
-   "id": "boiler-salt",
-   "name": "boiler salt",
-   "description": "water softener for boiler",
-   "supplier": "Nalco",
-   "min": 10,
-   "seedCount": 93,
-   "rule": "topup",
-   "unit": "units",
-   "storage": "approx 1 years supply, stored in grain warehouse",
-   "discontinued": false,
-   "notes": []
-  },
-  {
-   "id": "glycol-pur-spec-6595",
-   "name": "(Glycol)Pur-spec 6595",
-   "description": "glycol for chillers 200L",
-   "supplier": "Sopura",
-   "min": 1,
-   "seedCount": 1,
-   "rule": "topup",
-   "unit": "units",
-   "storage": "food grade - no bund needed. storage in can warehouse",
-   "discontinued": false,
-   "notes": []
-  },
-  {
-   "id": "oxypak-s",
-   "name": "Oxypak S",
-   "description": "",
-   "supplier": "Ecolab",
-   "min": 6,
-   "seedCount": 6,
-   "rule": "topup",
-   "unit": "units",
-   "storage": "",
-   "discontinued": false,
-   "notes": []
-  }
- ],
- "suppliers": {
-  "Sopura": {
-   "label": "Sopura",
-   "rule": "Delivers Tuesday and Friday. Order by Thursday AM for Tuesday, by Tuesday for Friday.",
-   "mode": "cutoff",
-   "cutoffs": [
-    {
-     "orderDow": 4,
-     "deliverDow": 2,
-     "weekOffset": 1
-    },
-    {
-     "orderDow": 2,
-     "deliverDow": 5,
-     "weekOffset": 0
-    }
-   ]
-  },
-  "Ecolab": {
-   "label": "Ecolab",
-   "rule": "Order Friday for the following Friday delivery.",
-   "mode": "cutoff",
-   "cutoffs": [
-    {
-     "orderDow": 5,
-     "deliverDow": 5,
-     "weekOffset": 1
-    }
-   ]
-  },
-  "Nalco": {
-   "label": "Nalco",
-   "rule": "Delivery two weeks after the PO is raised. Order bulk refills at about 30% (caustic) or 45% (acid).",
-   "mode": "leadDays",
-   "leadDays": 14
-  }
- },
- "unmapped": {
-  "LIMITED @ DME": 6,
-  "LPA @ Krones": 2,
-  "BLACK @ Krones": 1
+  ],
+  "lastBrew": "2026-11-01"
  }
 }

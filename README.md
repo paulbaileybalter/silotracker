@@ -1,6 +1,6 @@
 # Silo Grain Tracker · Balter Brewing
 
-Forecasts when to book pale and wheat malt deliveries from the ST26 brewing schedule, and runs the weekly chemical stocktake with an auto-built order list and usage trends. One Cloudflare Worker: password gate, shared storage, and the static site.
+Forecasts when to book pale and wheat malt deliveries from the ST26 brewing schedule and your silo estimates. One Cloudflare Worker: password gate, shared storage, and the static site.
 
 ## Put it online (Cloudflare Worker + GitHub)
 
@@ -20,26 +20,32 @@ If you want to use your own domain, add it under Worker > Settings > Domains & R
 
 Recommended: Cloudflare dashboard > Security > WAF > Rate limiting rule on path `/_auth/login` (e.g. 10 requests per minute per IP) to block password guessing.
 
+## Silo history tab
+
+Plots every silo estimate on record: the full history in ST26's Bulk Demand sheet (about a year) plus anything entered on the site. Choose 4 weeks, 12 weeks, 6 months or all time, and view by supply group (with the forecast continuing from today, deliveries marked) or each silo on one chart. A table lists every estimate, and **Download CSV** exports them. Estimates typed on the site appear as "Entered here"; once the radars are fitted, switch the source to Radar when saving and those points are drawn solid.
+
 ## Weekly routine
 
-- **Grain tab:** enter the silo estimates (tonnes) > Save. Add any delivery you book under *Booked deliveries*.
-- **Chemicals tab:** enter counts (and anything delivered since last count) > Save stocktake. Copy the order list.
-- **After you change the brewing schedule in ST26:** click **Update from ST26** (top right) and pick the workbook. It's read in your browser; the file is not uploaded. Only the schedule, recipes and chemical list are used.
-
-To refresh the data that ships with the site instead: `npm install` then `npm run build-data -- path/to/ST_26.xlsx`, commit `public/data/st26.json`.
+- **Upload the latest ST26** (drop the `.xlsx` on the "Latest ST26" card, or use the button top right). It's read in your browser, not sent anywhere. The site picks up:
+  - the **brewing schedule** and **recipes** (silo grain per brew),
+  - your **latest silo estimates** (the Silo 1 Volume, Silo 2 / Silo 3 Adjusted Volume and Silo 4 Volume lines on Bulk Demand), and
+  - the **deliveries** you've typed on the Silo 1 DME Refill, Silo 2+3 Krones and Silo 4 Wheat Krones Refill lines, with PO numbers.
+- The site counts those deliveries and only suggests extra ones on top. It also warns if a booked delivery would take a silo over the 28 t working limit.
+- You can still type a fresh estimate or add a delivery directly on the site. A later ST26 upload replaces ST26-sourced deliveries and any hand-entered delivery on the same silo and day.
+- The first time anyone opens the site it starts from the ST26 that was bundled with it. To refresh that bundled copy instead: `npm install`, then `npm run build-data -- path/to/ST_26.xlsx`, and commit `public/data/st26.json`.
 
 ## How the grain forecast works
 
-- Silo grain per brew comes from **Recipes 1** (the "Barrett Burston Pale Malt Silo" and "Wheat Malt Silo" lines). Brews come from the date columns on **Demand Summary** (`XPAX6` = 6 XPA brews).
+- Silo grain per brew comes from **Recipes 1** (the "Barrett Burston Pale Malt Silo" and "Wheat Malt Silo" lines). Brews come from the date columns on **Bulk Demand** (`XPAX6` = 6 XPA brews). The schedule is treated as complete up to the last day with a brew.
 - Silo 1 ← DME brews. Silos 2 + 3 (treated as one pool; 2 is moved into 3 before a delivery) and Silo 4 (wheat) ← Krones brews. Bagged wheat is not counted against Silo 4.
-- After the schedule ends, use = average daily use of the scheduled days (adjustable in Settings).
+- After the schedule ends, use = the average daily use of its last four weeks (adjustable in Settings).
 - Delivery date = the **latest** allowed day on which the silo still has room for the load and is above your reserve. Order-by = delivery minus notice (weekends roll back to Friday).
 - Silo levels are hand estimates, so each reading carries a ±range (default ±3 t per silo, set in Settings). Plans use the best guess; flags warn when the low end would run out first or the high end wouldn't fit a load. Switch the source to **Radar** once installed and the range drops to ±0.3 t.
 
 ## Things in ST26 worth knowing
 
-- Demand Summary's old "Bulk Pale Usage" cells use fixed kg per brew (e.g. XPA Krones 625 kg) that no longer match Recipes 1 (905 kg). The site uses Recipes 1.
-- `LIMITED` brews on DME have no recipe, so they count as 0 kg. `LPA` and `BLACK` on Krones borrow the DME recipe. Listed under *Grain use trends*.
+- A blank Silo 2 estimate on a day when Silo 3 has one is treated as empty (matching your sheet's TOTAL VOLUME line).
+- Deliveries are any amount typed on a refill line, not only 24,000 and 26,000. On 16 Oct, 6,000 on Silo 1 and 18,000 on Silos 2 + 3 share PO21635, so the site shows it as one split truck.
+- `LIMITED` and `DOLCITA` brews on DME have no silo recipe, so they count as 0 kg. `LPA` and `BLACK` on Krones borrow the DME recipe. Listed under *Grain use trends*.
 - Ordering Info says wheat can be delivered Thursday **or Friday**; the site follows your rule (Thursday only). Change it in Settings if that has changed.
-- Synergex 1000L has min 0.3 vs count 10, which looks like mixed units. Flagged "Check units".
 - The Ordering Info sheet contains plain-text logins. Keep the workbook out of GitHub, and consider moving those to a password manager.

@@ -1,5 +1,5 @@
 /* =========================================================
-   SETTINGS VIEW: silo rules, chemical minimums, ST26 data, backups.
+   SETTINGS VIEW: silo rules, ST26 data, backups.
    ========================================================= */
 (function () {
   'use strict';
@@ -11,7 +11,7 @@
   }
 
   function render(el) {
-    const st = App.settings(), d = App.data(), sups = App.suppliers(), chems = App.chemicals();
+    const st = App.settings(), d = App.data();
     const t = kg => App.t(kg);
     let h = `<section class="card" data-acc="mint"><div class="card__h"><div><h2>Silo and delivery rules</h2><p class="sub">These drive every grain forecast. Tonnes unless stated.</p></div><button class="btn btn--primary" id="saveSet" type="button">Save settings</button></div>
       <div class="grid2">
@@ -32,22 +32,16 @@
       <div style="margin-top:10px"><div class="strong" style="font-size:12.5px;margin-bottom:4px">Wheat malt delivery days</div>${dayBoxes('wheat', st.wheatDays)}</div>
       <p class="faint" style="font-size:12px;margin:12px 0 0">The reserve is the lowest level you're comfortable letting a silo reach before a truck arrives. Silos hold 30 t physically but are treated as ${t(st.cap)} t.</p></section>`;
 
-    h += `<section class="card" data-acc="purple"><div class="card__h"><div><h2>Chemical minimums and suppliers</h2><p class="sub">Starts from the ST26 Chemicals sheet. Changes here are kept on top of ST26, so re-importing the workbook won't undo them.</p></div></div>
-      <div class="tscroll"><table><thead><tr><th>Chemical</th><th>Supplier</th><th class="num">Min stock</th><th>In stocktake</th></tr></thead><tbody>${chems.map(c => `<tr data-cid="${c.id}"><td><div class="chem-name">${esc(c.name)}</div><div class="chem-desc">${esc(c.description || '')}${c.discontinued ? ' · marked discontinued in ST26' : ''}</div></td>
-        <td><select data-c="supplier">${Object.keys(sups).map(s => `<option ${s === c.supplier ? 'selected' : ''}>${s}</option>`).join('')}</select></td>
-        <td class="num"><input type="number" step="any" data-c="min" value="${c.unit === 'tank%' ? Math.round(c.min * 100) : c.min}" style="width:80px">${c.unit === 'tank%' ? ' %' : ''}</td>
-        <td><label style="display:inline-flex;gap:6px;align-items:center"><input type="checkbox" data-c="active" ${c.active ? 'checked' : ''}> Include</label></td></tr>`).join('')}</tbody></table></div></section>`;
-
     const dates = d.schedule.dates, un = Object.keys(d.unmapped || {});
-    h += `<section class="card" data-acc="sky"><div class="card__h"><div><h2>ST26 data</h2><p class="sub">The site reads three sheets from ST26: the brewing schedule (Demand Summary), recipes (Recipes 1) and chemicals (Chemicals). Nothing else from the workbook is used or stored.</p></div>
-      <button class="btn btn--primary" id="importBtn2" type="button">Import updated ST_26.xlsx</button></div>
-      <div class="grid2"><div class="tcard" style="cursor:default"><b>Source file</b><div>${esc(d.source)}</div><div class="faint" style="font-size:12px">Read ${new Date(d.builtAt).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' })}${App.state.st26 && d === App.state.st26 ? ' (imported in the browser)' : ' (bundled with the site)'}</div></div>
-      <div class="tcard" style="cursor:default"><b>Schedule covers</b><div>${App.fmtD(dates[0])} to ${App.fmtD(dates[dates.length - 1])}</div><div class="faint" style="font-size:12px">${d.schedule.brews.length} brew entries</div></div>
+    h += `<section class="card" data-acc="sky"><div class="card__h"><div><h2>ST26 data</h2><p class="sub">The site reads two sheets from ST26: Bulk Demand (brewing schedule, silo estimates, and the deliveries typed on the refill lines) and Recipes 1 (silo grain per brew). Nothing else from the workbook is used or stored.</p></div>
+      <button class="btn btn--primary" id="importBtn2" type="button">Upload latest ST26</button></div>
+      <div class="grid2"><div class="tcard" style="cursor:default"><b>Source file</b><div>${esc(d.source)}</div><div class="faint" style="font-size:12px">Read ${new Date(d.builtAt).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' })}${App.state.st26 && d === App.state.st26 ? ' (uploaded in the browser)' : ' (bundled with the site)'}</div></div>
+      <div class="tcard" style="cursor:default"><b>Schedule covers</b><div>${App.fmtD(dates[0])} to ${App.fmtD(d.schedule.lastBrew)}</div><div class="faint" style="font-size:12px">${d.schedule.brews.length} brew entries. After that, use is estimated.</div></div>
       <div class="tcard" style="cursor:default"><b>Recipes with silo grain</b><div>${Object.keys(d.recipes).length} brands</div><div class="faint" style="font-size:12px">${un.length ? un.length + ' scheduled brews have no recipe' : 'All scheduled brews matched'}</div></div></div>
-      <p class="faint" style="font-size:12px;margin:12px 0 0">Importing runs in your browser; the workbook isn't uploaded anywhere. The new data is saved with your entries and synced to your other devices.</p>
-      <div class="row" style="margin-top:12px">${App.state.st26 ? '<button class="btn" id="resetSt" type="button">Go back to the bundled ST26 data</button>' : ''}</div></section>`;
+      <p class="faint" style="font-size:12px;margin:12px 0 0">The upload is read in your browser; the workbook isn't sent anywhere. The estimates and deliveries it contains are saved with your other entries and synced to your other devices.</p>
+      <div class="row" style="margin-top:12px">${App.state.st26 ? '<button class="btn" id="resetSt" type="button">Go back to the ST26 that came with the site</button>' : ''}</div></section>`;
 
-    h += `<section class="card" data-acc="ink"><div class="card__h"><div><h2>Backup</h2><p class="sub">Your silo estimates, bookings, stocktakes and settings, as a file.</p></div></div>
+    h += `<section class="card" data-acc="ink"><div class="card__h"><div><h2>Backup</h2><p class="sub">Your silo estimates, bookings and settings, as a file.</p></div></div>
       <div class="row"><button class="btn" id="exportBtn" type="button">Download backup</button><button class="btn" id="restoreBtn" type="button">Restore from backup</button><input type="file" id="restoreFile" accept=".json,application/json" hidden>
       <button class="btn btn--danger" id="wipeBtn" type="button">Clear all entries</button></div></section>`;
     el.innerHTML = h;
@@ -70,16 +64,6 @@
       if (!s.paleDays.length || !s.wheatDays.length) return App.toast('Pick at least one delivery day for each grain');
       S.settings = s; App.save(); App.toast('Settings saved');
     });
-    App.$$('tr[data-cid]', el).forEach(row => {
-      const id = row.dataset.cid, chem = App.chemicals().find(c => c.id === id);
-      App.$$('[data-c]', row).forEach(inp => inp.addEventListener('change', () => {
-        const o = S.chem[id] = S.chem[id] || {}, k = inp.dataset.c;
-        if (k === 'min') { const v = App.num(inp.value); if (v === null || v < 0) return App.toast('Enter a number'); o.min = chem.unit === 'tank%' ? v / 100 : v; }
-        if (k === 'supplier') o.supplier = inp.value;
-        if (k === 'active') o.active = inp.checked;
-        App.save(); App.toast('Saved');
-      }));
-    });
     const rs = App.$('#resetSt', el); if (rs) rs.addEventListener('click', () => { if (!confirm('Discard the imported data and use the bundled ST26 data?')) return; S.st26 = null; App.save(); App.render(); });
     App.$('#exportBtn', el).addEventListener('click', () => {
       const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(S, null, 1)], { type: 'application/json' }));
@@ -91,8 +75,8 @@
       catch (err) { App.toast('Restore failed: ' + err.message); }
     });
     App.$('#wipeBtn', el).addEventListener('click', () => {
-      if (!confirm('Delete all silo estimates, bookings, stocktakes and settings? This cannot be undone.')) return;
-      Object.assign(S, { readings: [], deliveries: [], stocktakes: [], settings: {}, chem: {}, st26: null }); App.save(); App.render(); App.toast('Cleared');
+      if (!confirm('Delete all silo estimates, bookings and settings? This cannot be undone.')) return;
+      Object.assign(S, { readings: [], deliveries: [], settings: {}, st26: null, seeded: true, lastImport: null }); App.save(); App.render(); App.toast('Cleared');
     });
   }
   App.views.settings = { render };
