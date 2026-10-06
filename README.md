@@ -37,15 +37,17 @@ Plots every silo estimate on record: the full history in ST26's Bulk Demand shee
 ## How the grain forecast works
 
 - Silo grain per brew comes from **Recipes 1** (the "Barrett Burston Pale Malt Silo" and "Wheat Malt Silo" lines). Brews come from the date columns on **Bulk Demand** (`XPAX6` = 6 XPA brews). The schedule is treated as complete up to the last day with a brew.
-- Silo 1 ← DME brews. Silos 2 + 3 (treated as one pool; 2 is moved into 3 before a delivery) and Silo 4 (wheat) ← Krones brews. Bagged wheat is not counted against Silo 4.
+- Silo 1 ← DME brews. Silo 3 ← Silo 2 only, and Silos 2 + 3 together (treated as a 56 t pool) ← Krones brews. Silo 4 (wheat) ← Krones brews. Bagged wheat is not counted against Silo 4.
+- **Pale malt trucks are planned across Silos 1, 2 and 3 together.** A truck is never unloaded into Silo 3. It goes into Silo 2 (which is moved into Silo 3 to make room), and Silo 1 takes whatever doesn't fit. If Silo 1 is the one running low first, it fills first instead. Room in Silo 2 is the smaller of 28 t and what's left of the pool.
 - After the schedule ends, use = the average daily use of its last four weeks (adjustable in Settings).
-- Delivery date = the **latest** allowed day on which the silo still has room for the load and is above your reserve. Order-by = delivery minus notice (weekends roll back to Friday).
+- Delivery date = the **latest** allowed day on which both sides are above their reserves and there is room for the truck. Order-by = delivery minus notice (weekends roll back to Friday).
 - Silo levels are hand estimates, so each reading carries a ±range (default ±3 t per silo, set in Settings). Plans use the best guess; flags warn when the low end would run out first or the high end wouldn't fit a load. Switch the source to **Radar** once installed and the range drops to ±0.3 t.
 
 ## Things in ST26 worth knowing
 
 - A blank Silo 2 estimate on a day when Silo 3 has one is treated as empty (matching your sheet's TOTAL VOLUME line).
-- Deliveries are any amount typed on a refill line, not only 24,000 and 26,000. On 16 Oct, 6,000 on Silo 1 and 18,000 on Silos 2 + 3 share PO21635, so the site shows it as one split truck.
+- Deliveries are any amount typed on a refill line, not only 24,000 and 26,000. Pale entries on the same day are shown as one truck split between Silo 2 and Silo 1 (e.g. 16 Oct: 18 t + 6 t on PO21635). Silo 1 often gets only small amounts, so those are not flagged.
+- Default reserves come from your history: Silos 2 + 3 held about 20 to 35 t (median about 29 t) when trucks arrived, so the pool reserve is 15 t and Silo 1 is 5 t. Change them in Settings.
 - `LIMITED` and `DOLCITA` brews on DME have no silo recipe, so they count as 0 kg. `LPA` and `BLACK` on Krones borrow the DME recipe. Listed under *Grain use trends*.
 - Ordering Info says wheat can be delivered Thursday **or Friday**; the site follows your rule (Thursday only). Change it in Settings if that has changed.
 - The Ordering Info sheet contains plain-text logins. Keep the workbook out of GitHub, and consider moving those to a password manager.

@@ -30,7 +30,7 @@
       </div>
       <div style="margin-top:14px"><div class="strong" style="font-size:12.5px;margin-bottom:4px">Pale malt delivery days</div>${dayBoxes('pale', st.paleDays)}</div>
       <div style="margin-top:10px"><div class="strong" style="font-size:12.5px;margin-bottom:4px">Wheat malt delivery days</div>${dayBoxes('wheat', st.wheatDays)}</div>
-      <p class="faint" style="font-size:12px;margin:12px 0 0">The reserve is the lowest level you're comfortable letting a silo reach before a truck arrives. Silos hold 30 t physically but are treated as ${t(st.cap)} t.</p></section>`;
+      <p class="faint" style="font-size:12px;margin:12px 0 0">The reserve is the lowest level you're comfortable letting a silo reach before a truck arrives. For reference, in your ST26 history Silos 2 + 3 typically held 20 to 35 t when a truck arrived (median about 29 t), so the pool default is 15 t to allow for estimate error. Silo 2 takes each pale truck first and moves it on to Silo 3; Silo 1 takes what doesn't fit. Silos hold 30 t physically but are treated as ${t(st.cap)} t.</p></section>`;
 
     const dates = d.schedule.dates, un = Object.keys(d.unmapped || {});
     h += `<section class="card" data-acc="sky"><div class="card__h"><div><h2>ST26 data</h2><p class="sub">The site reads two sheets from ST26: Bulk Demand (brewing schedule, silo estimates, and the deliveries typed on the refill lines) and Recipes 1 (silo grain per brew). Nothing else from the workbook is used or stored.</p></div>

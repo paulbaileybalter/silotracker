@@ -6,9 +6,9 @@
   const App = window.App, F = App.F, C = Charts, esc = App.esc;
   const COL = { silo1: '#7566A0', pool: '#47D7AC', silo4: '#FDAA63' };
   const SILOS = [
-    { id: 'silo1', name: 'Silo 1', feeds: 'Pale malt to the DME brewhouse', grain: 'pale', group: 'silo1' },
-    { id: 'silo2', name: 'Silo 2', feeds: 'Pale malt, fills Silo 3', grain: 'pale', group: 'pool' },
-    { id: 'silo3', name: 'Silo 3', feeds: 'Pale malt to the Krones brewhouse', grain: 'pale', group: 'pool' },
+    { id: 'silo1', name: 'Silo 1', feeds: 'Pale malt to the DME brewhouse, takes what doesn\'t fit in Silo 2', grain: 'pale', group: 'silo1' },
+    { id: 'silo2', name: 'Silo 2', feeds: 'Takes the pale truck, moves it on to Silo 3', grain: 'pale', group: 'pool' },
+    { id: 'silo3', name: 'Silo 3', feeds: 'Only fed from Silo 2, feeds the Krones brewhouse', grain: 'pale', group: 'pool' },
     { id: 'silo4', name: 'Silo 4', feeds: 'Wheat malt to the Krones brewhouse', grain: 'wheat', group: 'silo4' }
   ];
   let usageMode = 'day', readSource = null;
@@ -69,8 +69,8 @@
     /* --- plan --- */
     if (rd) {
       h += `<section class="card" data-acc="apricot"><div class="card__h"><div><h2>When to order grain</h2>
-        <p class="sub">Built from the ST26 brewing schedule and recipes. Pale malt: ${days(st.paleDays)}, booked at least ${st.paleNoticeDays * 24} hours ahead, ${App.t(st.paleDelivery)} t loads. Wheat malt: ${days(st.wheatDays)}, booked at least ${st.wheatNoticeDays} days ahead, ${App.t(st.wheatDelivery)} t loads. Silos are treated as holding ${App.t(st.cap)} t.</p></div></div>`;
-      F.GROUP_ORDER.forEach(g => { h += planRow(g, P, today, st); });
+        <p class="sub">Built from the ST26 brewing schedule and recipes. Pale malt: ${days(st.paleDays)}, booked at least ${st.paleNoticeDays * 24} hours ahead, ${App.t(st.paleDelivery)} t trucks that fill Silo 2 first (it moves grain on to Silo 3) with the rest going to Silo 1. Wheat malt: ${days(st.wheatDays)}, booked at least ${st.wheatNoticeDays} days ahead, ${App.t(st.wheatDelivery)} t loads. Silos are treated as holding ${App.t(st.cap)} t.</p></div></div>`;
+      h += paleRow(P, today, st) + planRow('silo4', P, today, st);
       h += '</section>';
     } else {
       h += `<div class="empty">Save your first silo estimates above to see delivery dates and forecasts.</div>`;
@@ -125,6 +125,57 @@
       <p class="muted" style="font-size:13px;margin:12px 0 0">${sumLine}</p>
       ${notes.map(n => `<p class="faint" style="font-size:12.5px;margin:4px 0 0">${esc(n.replace(/\d{4}-\d{2}-\d{2}/g, x => App.fmtD(x)))}</p>`).join('')}</section>`;
   }
+
+
+  /* ---------- pale malt: Silos 1, 2 and 3 share the trucks ---------- */
+  function paleRow(P, today, st) {
+    const trucks = P.pale.trucks, g1 = P.groups.silo1, gP = P.groups.pool, t0 = trucks[0];
+    let chip;
+    if (!t0) chip = ['ok', 'No pale truck needed in the next ' + Math.round(st.horizonDays / 7) + ' weeks'];
+    else if (t0.type === 'none') chip = ['bad', 'No delivery day available inside the forecast'];
+    else if (t0.type === 'late') chip = ['bad', 'Running low before the earliest delivery'];
+    else { const od = F.diffDays(today, t0.orderBy); chip = [t0.type === 'ok' && od > 1 ? 'ok' : 'warn', od <= 0 ? 'Order today' : od === 1 ? 'Order tomorrow' : 'Order by ' + App.fmtD(t0.orderBy)]; }
+    let h = `<div class="plan"><div><h3><span class="swatch" style="background:${COL.pool}"></span>Pale malt<span class="chip chip--${chip[0]}">${esc(chip[1])}</span></h3>
+      <div class="sub" style="margin-top:4px">Silos 1, 2 and 3 · now about ${App.tt(g1.currentKg)} in Silo 1 (±${App.t(g1.uncKg)} t) and ${App.tt(gP.currentKg)} in Silos 2 + 3 (±${App.t(gP.uncKg)} t)</div>`;
+    if (!t0) {
+      const low = g => g.proj.filter(r => F.ms(r.date) >= F.ms(today)).reduce((m, r) => Math.min(m, r.pre), Infinity);
+      h += `<p class="muted" style="font-size:13px">Lowest forecast levels: Silo 1 about ${App.tt(Math.max(0, low(g1)))}, Silos 2 + 3 about ${App.tt(Math.max(0, low(gP)))}.</p>`;
+    }
+    trucks.slice(0, 3).forEach(t => { h += truckCard(t, P, today, st); });
+    if (trucks.length > 3) h += `<p class="faint" style="font-size:12px;margin:8px 0 0">${trucks.length - 3} more trucks follow in the charts, based on average use.</p>`;
+    const booked = g1.deliveries.concat(gP.deliveries).filter(d => d.kind === 'booked').sort((a, b) => a.date < b.date ? -1 : 1);
+    if (booked.length) h += `<div style="margin-top:12px"><div class="strong" style="font-size:13px;margin-bottom:4px">Booked and counted in this forecast</div><ul class="bk">${booked.map(d => {
+      const n = bookedNote(P.groups[d.group], d);
+      return `<li><b>${App.fmtD(d.date)}</b> · ${esc(delName(d.group))} ${App.t(d.qty)} t${d.po ? ' · ' + esc(d.po) : ''}${n ? `<div class="bk__n ${n.bad ? 'bad' : ''}">${esc(n.text)}</div>` : ''}</li>`; }).join('')}</ul></div>`;
+    h += `</div><div><div class="strong" style="font-size:13px;margin-bottom:2px"><span class="swatch" style="background:${COL.silo1}"></span> Silo 1</div><div class="ch" data-chart="silo1"></div>
+      <div class="strong" style="font-size:13px;margin:10px 0 2px"><span class="swatch" style="background:${COL.pool}"></span> Silos 2 + 3</div><div class="ch" data-chart="pool"></div>
+      <div class="legend"><span><i style="background:${COL.silo1}"></i>Best guess</span><span><i style="background:#bdbfc4"></i>Low / high end of estimate</span><span><i style="background:#14161a"></i>Working limit</span></div></div></div>`;
+    return h;
+  }
+
+  function truckCard(t, P, today, st) {
+    if (t.type === 'none') return `<div class="del del--bad"><div class="del__d">No delivery day found</div><div class="del__m">Nothing fits inside the forecast window. Check Settings.</div></div>`;
+    const cls = t.type === 'ok' ? 'ok' : t.type === 'late' ? 'bad' : 'warn', od = F.diffDays(today, t.orderBy), s = t.split, parts = [];
+    if (s.pool > 0) parts.push(`${App.t(s.pool)} t into Silo 2 (it moves on to Silo 3)`);
+    if (s.silo1 > 0) parts.push(`${App.t(s.silo1)} t into Silo 1`);
+    let how = parts.join(' and ') + '.';
+    if (s.pool > 0 && s.silo1 > 0) how += t.driver === 'pool' ? ' Silo 2 fills first and Silo 1 takes what doesn\'t fit.' : ' Silo 1 is running lower, so it fills first.';
+    else if (s.silo1 > 0 && s.pool === 0) how += ' Silo 1 is the one running low, so the whole truck goes there.';
+    let main = '';
+    const lv = `Silos 2 + 3 about ${App.tt(Math.max(0, t.preP))}, Silo 1 about ${App.tt(Math.max(0, t.pre1))}`;
+    if (t.type === 'ok') main = `When it arrives: ${lv}.`;
+    if (t.type === 'reserve') main = `No delivery day lands with both sides above their reserves and room for the truck. This is the least bad day. When it arrives: ${lv}.`;
+    if (t.type === 'overflow') main = `The pale silos will be too full to take it all: only about ${App.tt(t.qty - t.lostKg)} of the ${App.t(t.qty)} t fits. Ask the supplier about a part load. When it arrives: ${lv}.`;
+    if (t.type === 'late') main = `Too late to avoid running low. This is the earliest possible truck, and the best guess is short by ${App.tt(t.shortKg)} by then${t.runout ? ' (empty around ' + App.fmtD(t.runout) + ')' : ''}.`;
+    const bullets = [];
+    if (t.lowRisk) bullets.push('If a silo is at the low end of your estimate, it could run out before this truck. Check the sight glasses before relying on the date.');
+    if (t.fitRisk && t.type !== 'overflow') bullets.push('If the silos are fuller than they look, part of the truck may not fit. Check the sight glasses the day before.');
+    if (t.date > P.U.last) bullets.push('This date is past the ST26 schedule, so it relies on average use.');
+    return `<div class="del del--${cls}"><div class="del__d">${App.fmtD(t.date)} · ${App.t(t.qty)} t truck</div>
+      <div class="del__m"><b>${od <= 0 ? 'Order today' : 'Order by ' + App.fmtD(t.orderBy)}</b> (${st.paleNoticeDays * 24} hours notice)</div>
+      <div style="font-size:13px;margin-top:6px"><b>${esc(how)}</b></div><div style="font-size:13px;margin-top:4px">${esc(main)}</div>${bullets.length ? '<ul>' + bullets.map(b => '<li>' + esc(b) + '</li>').join('') + '</ul>' : ''}</div>`;
+  }
+  const delName = g => g === 'pool' ? 'Silo 2 (to Silo 3)' : F.GROUPS[g].name;
 
   function planRow(g, P, today, st) {
     const pr = P.groups[g], M = F.GROUPS[g], r0 = pr.recs[0], unc = pr.uncKg;
@@ -243,24 +294,24 @@
   function bookingsCard(P, today, st) {
     const S = App.state, list = S.deliveries.slice().sort((a, b) => a.date < b.date ? -1 : 1);
     const rd = P.reading, active = d => d.status !== 'received';
-    const splits = {};   // deliveries sharing a PO on the same day are one truck split between silos
-    list.filter(active).forEach(d => { if (d.po) { const k = d.date + '|' + d.po; (splits[k] = splits[k] || []).push(d); } });
+    const splits = {};   // pale deliveries on the same day are one truck split between Silo 2 and Silo 1
+    list.filter(d => active(d) && d.group !== 'silo4').forEach(d => { (splits[d.date] = splits[d.date] || []).push(d); });
     const splitKeys = Object.keys(splits).filter(k => splits[k].length > 1);
-    const inSplit = d => splitKeys.some(k => splits[k].includes(d));
+    const dayTotal = d => (splits[d.date] || []).reduce((s, x) => s + x.qty, 0);
     const rows = list.map(d => {
       const M = F.GROUPS[d.group], okDay = F.groupDays(d.group, st).includes(F.dow(d.date)), std = F.groupDelivery(d.group, st);
       const pr = P.groups && P.groups[d.group], n = pr && active(d) ? bookedNote(pr, d) : null;
-      return `<tr><td><span class="swatch" style="background:${COL[d.group]}"></span> ${M.name}</td><td>${App.fmtD(d.date)}</td><td class="num">${App.t(d.qty)} t</td><td>${esc(d.po || '')}</td>
-        <td>${d.status === 'received' ? '<span class="chip chip--n">Received</span>' : '<span class="chip chip--info">Booked</span>'}${d.source === 'st26' ? ' <span class="chip chip--n">From ST26</span>' : ''}${okDay ? '' : ' <span class="chip chip--warn">Not a usual delivery day</span>'}${d.qty !== std && !inSplit(d) ? ' <span class="chip chip--warn">Not a standard ' + App.t(std) + ' t load</span>' : ''}${n ? `<div class="bk__n ${n.bad ? 'bad' : ''}">${esc(n.text)}</div>` : ''}</td>
+      return `<tr><td><span class="swatch" style="background:${COL[d.group]}"></span> ${esc(delName(d.group))}</td><td>${App.fmtD(d.date)}</td><td class="num">${App.t(d.qty)} t</td><td>${esc(d.po || '')}</td>
+        <td>${d.status === 'received' ? '<span class="chip chip--n">Received</span>' : '<span class="chip chip--info">Booked</span>'}${d.source === 'st26' ? ' <span class="chip chip--n">From ST26</span>' : ''}${okDay ? '' : ' <span class="chip chip--warn">Not a usual delivery day</span>'}${d.group === 'silo4' ? (d.qty !== std ? ' <span class="chip chip--warn">Not a standard ' + App.t(std) + ' t load</span>' : '') : (active(d) && dayTotal(d) > std ? ' <span class="chip chip--warn">More than one ' + App.t(std) + ' t truck that day</span>' : '')}${n ? `<div class="bk__n ${n.bad ? 'bad' : ''}">${esc(n.text)}</div>` : ''}</td>
         <td class="num">${d.status === 'received' ? '' : `<button class="btn btn--sm" data-recv="${d.id}">Mark received</button> `}<button class="btn btn--sm btn--danger" data-deldel="${d.id}">Remove</button></td></tr>`;
     }).join('');
-    const splitNote = splitKeys.map(k => { const ds = splits[k]; return `${App.fmtD(ds[0].date)}: ${ds.map(d => F.GROUPS[d.group].name + ' ' + App.t(d.qty) + ' t').join(' + ')} = ${App.t(ds.reduce((s, d) => s + d.qty, 0))} t on ${esc(ds[0].po)} (one truck split between silos).`; });
+    const splitNote = splitKeys.sort().map(k => { const ds = splits[k].slice().sort((a, b) => a.group === 'pool' ? -1 : 1), po = ds.map(d => d.po).find(Boolean); return `${App.fmtD(k)}: ${ds.map(d => delName(d.group) + ' ' + App.t(d.qty) + ' t').join(' + ')} = ${App.t(ds.reduce((s, d) => s + d.qty, 0))} t${po ? ' on ' + esc(po) : ''} (one truck: Silo 2 first, the rest to Silo 1).`; });
     const nextDay = g => { const n = F.groupNotice(g, st); let d = F.addDays(today, n); while (!F.groupDays(g, st).includes(F.dow(d))) d = F.addDays(d, 1); return d; };
     return `<section class="card" data-acc="sky"><div class="card__h"><div><h2>Booked deliveries</h2>
-      <p class="sub">Deliveries typed on the refill lines in ST26 appear here after each upload, and every forecast counts them, so the plan only asks for deliveries on top of these. You can also add one by hand. Mark a delivery received once it arrives, then update the silo estimates.</p></div></div>
+      <p class="sub">Deliveries typed on the refill lines in ST26 appear here after each upload, and every forecast counts them, so the plan only asks for deliveries on top of these. You can also add one by hand (for a split truck, add one line per silo). Mark a delivery received once it arrives, then update the silo estimates.</p></div></div>
       ${list.length ? `<div class="tscroll"><table><thead><tr><th>Silo</th><th>Delivery date</th><th class="num">Amount</th><th>PO</th><th>Status</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>` : '<div class="empty">No deliveries booked yet.</div>'}
       ${splitNote.length ? `<p class="muted" style="font-size:12.5px;margin:10px 0 0">${splitNote.join('<br>')}</p>` : ''}
-      <div class="row" style="margin-top:14px;align-items:flex-end"><label class="field">Goes to<select id="bkGroup"><option value="silo1">Silo 1 (pale)</option><option value="pool" selected>Silos 2 + 3 (pale)</option><option value="silo4">Silo 4 (wheat)</option></select></label>
+      <div class="row" style="margin-top:14px;align-items:flex-end"><label class="field">Goes to<select id="bkGroup"><option value="silo1">Silo 1 (pale)</option><option value="pool" selected>Silo 2, to Silo 3 (pale)</option><option value="silo4">Silo 4 (wheat)</option></select></label>
       <label class="field">Delivery date<input type="date" id="bkDate" value="${nextDay('pool')}"></label>
       <label class="field">Amount (t)<input type="number" step="0.5" id="bkQty" value="${App.t(st.paleDelivery)}" style="width:90px"></label>
       <button class="btn btn--primary" id="bkAdd" type="button">Add booked delivery</button></div></section>`;
