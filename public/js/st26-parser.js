@@ -142,5 +142,12 @@
     });
     return { builtAt: new Date().toISOString(), source: sourceName || 'ST_26.xlsx', aliases: CODE_ALIASES, recipes, unmapped, ...bulk };
   }
-  return { SHEETS, parseWorkbook };
+  // An older stock tool: only the silo estimate history and the refill log are wanted from it.
+  function parseArchive(wb, sourceName) {
+    if (!wb.Sheets['Bulk Demand']) throw new Error('This workbook has no "Bulk Demand" sheet, so it does not look like a stock tool.');
+    const b = parseBulk(wb.Sheets['Bulk Demand']);
+    const label = String(sourceName || 'Older stock tool').replace(/\.xls[xm]$/i, '');
+    return { source: label, history: b.history.map(h => Object.assign({ from: label }, h)), deliveryLog: b.deliveryLog.map(d => Object.assign({ from: label }, d)) };
+  }
+  return { SHEETS, parseWorkbook, parseArchive };
 });

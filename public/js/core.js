@@ -21,7 +21,7 @@ window.App = (function () {
   App.daysAgo = d => F.diffDays(d, App.todayISO());
 
   /* ---------- state ---------- */
-  const blank = () => ({ v: 1, updatedAt: 0, readings: [], deliveries: [], settings: {}, st26: null, seeded: false, lastImport: null });
+  const blank = () => ({ v: 1, updatedAt: 0, readings: [], deliveries: [], settings: {}, st26: null, seeded: false, lastImport: null, archives: [] });
   const clean = s => { const o = Object.assign(blank(), s); delete o.stocktakes; delete o.chem; return o; };   // chemical entries from the earlier version are dropped
   App.state = blank();
   function loadLocal() { try { const s = JSON.parse(localStorage.getItem(KEY)); if (s && s.v === 1) App.state = clean(s); } catch (e) { /* first run */ } }
@@ -64,7 +64,7 @@ window.App = (function () {
   App.syncNow = async function () { const changed = await pullRemote(false); if (changed) App.render(); App.toast(changed ? 'Updated from another device' : 'Already up to date'); };
 
   /* ---------- ST26 data ---------- */
-  let bundled = null;
+  let bundled = null, bundledArchives = [];
   App.data = function () {
     const s = App.state.st26;
     const d = s && bundled && s.builtAt > bundled.builtAt ? s : (s && !bundled ? s : bundled);
@@ -76,7 +76,9 @@ window.App = (function () {
     const r = await fetch('data/st26.json', { cache: 'no-store', credentials: 'same-origin' });
     if (!r.ok) throw new Error('Could not load data/st26.json (' + r.status + ')');
     bundled = await r.json();
+    try { const a = await fetch('data/archive.json', { cache: 'no-store', credentials: 'same-origin' }); if (a.ok) bundledArchives = (await a.json()).archives || []; } catch (e) { /* optional file */ }
   }
+  App.archives = () => { const up = App.state.archives || []; return bundledArchives.filter(b => !up.some(x => x.source === b.source)).concat(up); };   // bundled older stock tools, unless a same-named file was uploaded on the site
 
   /* ---------- importing an updated ST_26.xlsx (parsed in the browser, never uploaded) ---------- */
   function loadXLSX() {
@@ -99,6 +101,19 @@ window.App = (function () {
     out.deliveries.forEach(n => S.deliveries.push({ id: App.uid(), group: n.group, date: n.date, qty: n.qty, po: n.po || '', source: 'st26', status: 'booked' }));
     S.seeded = true;
     S.lastImport = { at: new Date().toISOString(), file: out.source, estimatesDate: date, deliveries: out.deliveries.length, scheduleTo: out.schedule.lastBrew, notes: out.notes || [] };
+  };
+  App.importArchive = async function (file) {
+    if (!file) return;
+    if (!/\.xls[xm]$/i.test(file.name)) return App.toast('Choose an older stock tool (.xlsx)');
+    App.toast('Reading ' + file.name + '. This takes a few seconds…');
+    try {
+      await loadXLSX();
+      const wb = XLSX.read(await file.arrayBuffer(), { type: 'array', sheets: ['Bulk Demand'], cellFormula: false });
+      const a = ST26Parser.parseArchive(wb, file.name);
+      App.state.archives = (App.state.archives || []).filter(x => x.source !== a.source).concat(a);
+      App.save(); App.render();
+      App.toast('Added ' + a.source + ': ' + a.history.length + ' estimate sets, ' + a.deliveryLog.length + ' deliveries');
+    } catch (e) { App.toast('Upload failed: ' + e.message); console.error(e); }
   };
   App.importST26 = async function (file) {
     if (!file) return;
@@ -137,6 +152,7 @@ window.App = (function () {
     App.$('#syncNow').addEventListener('click', App.syncNow);
     App.$('#importBtn').addEventListener('click', () => App.$('#importFile').click());
     App.$('#importFile').addEventListener('change', e => { App.importST26(e.target.files[0]); e.target.value = ''; });
+    App.$('#archiveFile').addEventListener('change', e => { App.importArchive(e.target.files[0]); e.target.value = ''; });
     let rt; window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(App.drawCharts, 150); });
     setSync('busy', 'Loading…');
     try { await loadBundled(); } catch (e) { App.$('#tab-grain').innerHTML = '<div class="note note--bad">' + App.esc(e.message) + '</div>'; return; }

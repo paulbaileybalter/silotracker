@@ -22,7 +22,7 @@ Recommended: Cloudflare dashboard > Security > WAF > Rate limiting rule on path 
 
 ## Silo history tab
 
-Plots every silo estimate on record: the full history in ST26's Bulk Demand sheet (about a year) plus anything entered on the site. Choose 4 weeks, 12 weeks, 6 months or all time, and view by supply group (with the forecast continuing from today, deliveries marked) or each silo on one chart. A table lists every estimate, and **Download CSV** exports them. Estimates typed on the site appear as "Entered here"; once the radars are fitted, switch the source to Radar when saving and those points are drawn solid.
+Plots every silo estimate on record: the full history in ST26's Bulk Demand sheet (about a year) plus anything entered on the site. Choose 4 weeks, 12 weeks, 6 months or all time, and view by supply group (with the forecast continuing from today, deliveries marked) or each silo on one chart. A table lists every estimate, and **Download CSV** exports them. **Older stock tools:** the 2025 stock tool is bundled (`public/data/archive.json`). It starts on the same day as the current ST26 (15 Sep 2025), so it only adds days ST26 doesn't have; where both cover a day, the current ST26 wins. To add another older workbook, use **Add an older stock tool** at the bottom of the tab (read in your browser and synced with your other entries), or bundle it with `npm run build-archive -- StockTool2025.xlsx another.xlsx` and commit `public/data/archive.json`. Estimates typed on the site appear as "Entered here"; once the radars are fitted, switch the source to Radar when saving and those points are drawn solid.
 
 ## Weekly routine
 

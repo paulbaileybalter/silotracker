@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "Silo grain and chemical stocktake planner for Balter Brewing",
   "scripts": {
-    "build-data": "node tools/build-data.mjs"
+    "build-data": "node tools/build-data.mjs",
+    "build-archive": "node tools/build-archive.mjs"
   },
   "private": true,
   "devDependencies": {

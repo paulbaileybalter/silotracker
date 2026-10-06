@@ -12,12 +12,26 @@
   let range = '12w', mode = 'group', showFc = true, shown = 30;
 
   /* ---------- one merged list of estimates ---------- */
+  // Older stock tools only fill in days the current ST26 doesn't cover: where both have a day, ST26 wins.
+  function merged(data) {
+    const baseDates = new Set((data.history || []).map(h => h.date)), baseDel = new Set((data.deliveryLog || []).map(d => d.group + '|' + d.date));
+    const addH = [], addD = [], stats = [];
+    App.archives().forEach(a => {
+      let nh = 0, nd = 0;
+      (a.history || []).forEach(h => { if (!baseDates.has(h.date)) { baseDates.add(h.date); addH.push(h); nh++; } });
+      (a.deliveryLog || []).forEach(d => { const k = d.group + '|' + d.date; if (!baseDel.has(k)) { baseDel.add(k); addD.push(d); nd++; } });
+      const hs = (a.history || []).map(h => h.date).sort();
+      stats.push({ source: a.source, total: (a.history || []).length, deliveries: (a.deliveryLog || []).length, from: hs[0], to: hs[hs.length - 1], nh, nd });
+    });
+    return { history: (data.history || []).concat(addH), deliveryLog: (data.deliveryLog || []).concat(addD), stats };
+  }
+
   // ST26 history first, then estimates typed on this site (these win on the same day, per silo).
-  function records(data) {
+  function records(M) {
     const map = {};
-    (data.history || []).forEach(h => {
+    (M.history || []).forEach(h => {
       const pool = h.silo2 === null && h.silo3 === null ? null : (h.silo2 || 0) + (h.silo3 || 0);   // a blank counts as 0 when the other silo has an estimate, as in ST26's TOTAL VOLUME
-      map[h.date] = { date: h.date, silo1: h.silo1, silo2: h.silo2, silo3: h.silo3, silo4: h.silo4, pool, src: { silo1: 'ST26', silo2: 'ST26', silo3: 'ST26', silo4: 'ST26' } };
+      map[h.date] = { date: h.date, silo1: h.silo1, silo2: h.silo2, silo3: h.silo3, silo4: h.silo4, pool, src: { silo1: h.from || 'ST26', silo2: h.from || 'ST26', silo3: h.from || 'ST26', silo4: h.from || 'ST26' } };
     });
     App.state.readings.filter(r => r.from !== 'st26').forEach(r => {
       const ids = r.entered || ['silo1', 'silo2', 'silo3', 'silo4'];
@@ -48,16 +62,16 @@
   /* ---------- render ---------- */
   function render(el) {
     const S = App.state, data = App.data(), today = App.todayISO(), st = App.settings();
-    const recs = records(data), P = F.planAll(S, data, today);
+    const M = merged(data), recs = records(M), P = F.planAll(S, data, today);
     const first = recs.length ? recs[0].date : today;
     let start = RANGES[range][1] ? F.addDays(today, -RANGES[range][1]) : first;
     if (F.ms(start) < F.ms(first)) start = first;
     const fcDays = showFc && mode === 'group' && P.reading ? Math.min(42, st.horizonDays) : 0;
     const days = F.eachDay(start, F.addDays(today, fcDays)), dayIdx = {}; days.forEach((d, i) => { dayIdx[d] = i; });
-    const log = (data.deliveryLog || []).filter(d => d.date >= start && d.date < today);
+    const log = M.deliveryLog.filter(d => d.date >= start && d.date < today);
 
     let h = `<section class="card" data-acc="purple"><div class="card__h"><div><h2>Silo quantities over time</h2>
-      <p class="sub">Every silo estimate on record: ${data.history ? data.history.length : 0} sets from ST26 (${recs.length ? App.fmtS(first) + ' ' + first.slice(0, 4) : 'none'} onwards) plus anything entered on this site. These are hand estimates (about ±${App.t(st.uncertaintyKg)} t), so small ups and downs are normal. Radar readings will appear as solid dots once fitted. Black dots mark deliveries.</p></div>
+      <p class="sub">Every silo estimate on record: ${M.history.length} sets from ST26${M.stats.length ? ' and older stock tools' : ''} (${recs.length ? App.fmtS(first) + ' ' + first.slice(0, 4) : 'none'} onwards) plus anything entered on this site. These are hand estimates (about ±${App.t(st.uncertaintyKg)} t), so small ups and downs are normal. Radar readings will appear as solid dots once fitted. Black dots mark deliveries.</p></div>
       <div class="row"><div class="seg" id="hRange">${Object.keys(RANGES).map(k => `<button type="button" data-r="${k}" aria-pressed="${range === k}">${RANGES[k][0]}</button>`).join('')}</div>
       <div class="seg" id="hMode"><button type="button" data-m="group" aria-pressed="${mode === 'group'}">By supply group</button><button type="button" data-m="silo" aria-pressed="${mode === 'silo'}">Each silo</button></div></div></div>
       <div class="row" style="margin-bottom:6px;justify-content:space-between"><label style="display:inline-flex;gap:7px;align-items:center;font-weight:600;font-size:13px;${mode === 'group' ? '' : 'opacity:.45'}"><input type="checkbox" id="hFc" ${showFc ? 'checked' : ''} ${mode === 'group' ? '' : 'disabled'}> Show the forecast from today</label>
@@ -88,8 +102,13 @@
     const rows = recs.slice().reverse().slice(0, shown);
     h += `<section class="card" data-acc="ink"><div class="card__h"><div><h2>Every estimate</h2><p class="sub">Newest first, in tonnes. A dash means that silo wasn't estimated that day. Silos 2 + 3 is the sum of the two (a blank counts as empty when the other has an estimate).</p></div></div>
       <div class="tscroll"><table><thead><tr><th>Date</th><th class="num">Silo 1</th><th class="num">Silo 2</th><th class="num">Silo 3</th><th class="num">Silo 4</th><th class="num">Silos 2 + 3</th><th>Source</th></tr></thead><tbody>
-      ${rows.map(r => { const srcs = [...new Set(Object.values(r.src))]; return `<tr><td>${App.fmtD(r.date)} <span class="faint">${r.date.slice(0, 4)}</span></td>${['silo1', 'silo2', 'silo3', 'silo4', 'pool'].map(k => `<td class="num">${tn(r[k])}</td>`).join('')}<td>${srcs.map(x => `<span class="chip ${x === 'ST26' ? 'chip--n' : x === 'Radar' ? 'chip--ok' : 'chip--info'}">${x}</span>`).join(' ')}</td></tr>`; }).join('')}
+      ${rows.map(r => { const srcs = [...new Set(Object.values(r.src))]; return `<tr><td>${App.fmtD(r.date)} <span class="faint">${r.date.slice(0, 4)}</span></td>${['silo1', 'silo2', 'silo3', 'silo4', 'pool'].map(k => `<td class="num">${tn(r[k])}</td>`).join('')}<td>${srcs.map(x => `<span class="chip ${x === 'Radar' ? 'chip--ok' : x === 'Entered here' ? 'chip--info' : 'chip--n'}">${esc(x)}</span>`).join(' ')}</td></tr>`; }).join('')}
       </tbody></table></div>${recs.length > shown ? `<div style="margin-top:12px"><button class="btn btn--sm" id="hMore" type="button">Show 30 more (${recs.length - shown} left)</button></div>` : ''}</section>`;
+    h += `<section class="card" data-acc="sky"><div class="card__h"><div><h2>Older stock tools</h2>
+      <p class="sub">Add an older stock tool workbook (any file with a Bulk Demand sheet) to push the history further back. The current ST26 always wins on days both cover. Earliest estimate on record: <b>${App.fmtD(first)} ${first.slice(0, 4)}</b>.</p></div><button class="btn" id="hArch" type="button">Add an older stock tool</button></div>
+      ${M.stats.length ? M.stats.map(a => { const up = (App.state.archives || []).some(x => x.source === a.source);
+        return `<div class="del" style="margin-top:8px"><div class="row" style="justify-content:space-between"><div><b>${esc(a.source)}</b> <span class="muted">${a.total} estimate sets, ${a.deliveries} deliveries, ${App.fmtS(a.from)} ${a.from.slice(0, 4)} to ${App.fmtS(a.to)} ${a.to.slice(0, 4)}</span></div>${up ? `<button class="btn btn--sm btn--danger" data-rmarch="${esc(a.source)}" type="button">Remove</button>` : '<span class="chip chip--n">Bundled with the site</span>'}</div>
+        <div class="del__m">${a.nh || a.nd ? `Added ${a.nh} estimate set${a.nh === 1 ? '' : 's'} and ${a.nd} deliver${a.nd === 1 ? 'y' : 'ies'} that the current ST26 doesn't have.` : 'Nothing new: every day in this file is already covered by the current ST26.'}</div></div>`; }).join('') : '<div class="empty" style="margin-top:6px">No older stock tools added yet.</div>'}</section>`;
     el.innerHTML = h;
 
     /* delivery lookups */
@@ -143,6 +162,8 @@
     App.$$('#hRange button', el).forEach(b => b.addEventListener('click', () => { range = b.dataset.r; App.render(); }));
     App.$$('#hMode button', el).forEach(b => b.addEventListener('click', () => { mode = b.dataset.m; App.render(); }));
     const fcBox = App.$('#hFc', el); if (fcBox) fcBox.addEventListener('change', () => { showFc = fcBox.checked; App.render(); });
+    App.$('#hArch', el).addEventListener('click', () => App.$('#archiveFile').click());
+    App.$$('[data-rmarch]', el).forEach(b => b.addEventListener('click', () => { if (!confirm('Remove ' + b.dataset.rmarch + ' from the history?')) return; App.state.archives = App.state.archives.filter(x => x.source !== b.dataset.rmarch); App.save(); App.render(); }));
     const more = App.$('#hMore', el); if (more) more.addEventListener('click', () => { shown += 30; App.render(); });
     App.$('#hEnter', el).addEventListener('click', () => { App.setTab('grain'); setTimeout(() => { const b = App.$('.board'); if (b) b.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 80); });
     App.$('#hCsv', el).addEventListener('click', () => {
