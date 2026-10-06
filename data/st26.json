@@ -1,0 +1,647 @@
+{
+ "builtAt": "2026-10-06T01:07:19.294Z",
+ "source": "ST_26.xlsx",
+ "aliases": {
+  "EAZY": "EAZY HAZY"
+ },
+ "recipes": {
+  "CPT": {
+   "DME": {
+    "pale": 0,
+    "wheat": 0
+   },
+   "Krones": {
+    "pale": 0,
+    "wheat": 0
+   }
+  },
+  "HAZY": {
+   "DME": {
+    "pale": 215,
+    "wheat": 0
+   },
+   "Krones": {
+    "pale": 410,
+    "wheat": 0
+   }
+  },
+  "IPA": {
+   "DME": {
+    "pale": 800,
+    "wheat": 0
+   },
+   "Krones": {
+    "pale": 0,
+    "wheat": 0
+   }
+  },
+  "LAGER": {
+   "DME": {
+    "pale": 525,
+    "wheat": 0
+   },
+   "Krones": {
+    "pale": 825,
+    "wheat": 0
+   }
+  },
+  "XPA": {
+   "DME": {
+    "pale": 400,
+    "wheat": 0
+   },
+   "Krones": {
+    "pale": 905,
+    "wheat": 300
+   }
+  },
+  "EAZY HAZY": {
+   "DME": {
+    "pale": 550,
+    "wheat": 0
+   },
+   "Krones": {
+    "pale": 850,
+    "wheat": 0
+   }
+  },
+  "GBWIND": {
+   "Krones": {
+    "pale": 1175,
+    "wheat": 0
+   }
+  },
+  "GBWAY": {
+   "Krones": {
+    "pale": 875,
+    "wheat": 175
+   }
+  },
+  "GBSUB": {
+   "Krones": {
+    "pale": 325,
+    "wheat": 0
+   }
+  },
+  "LPA": {
+   "DME": {
+    "pale": 345,
+    "wheat": 0
+   }
+  },
+  "BLACK": {
+   "DME": {
+    "pale": 507,
+    "wheat": 0
+   }
+  }
+ },
+ "schedule": {
+  "dates": [
+   "2026-10-02",
+   "2026-10-03",
+   "2026-10-04",
+   "2026-10-05",
+   "2026-10-06",
+   "2026-10-07",
+   "2026-10-08",
+   "2026-10-09",
+   "2026-10-10",
+   "2026-10-11",
+   "2026-10-12",
+   "2026-10-13",
+   "2026-10-14",
+   "2026-10-15"
+  ],
+  "brews": [
+   {
+    "date": "2026-10-02",
+    "system": "Krones",
+    "code": "CPT",
+    "brews": 1
+   },
+   {
+    "date": "2026-10-02",
+    "system": "Krones",
+    "code": "CPT",
+    "brews": 1
+   },
+   {
+    "date": "2026-10-02",
+    "system": "Krones",
+    "code": "EAZY",
+    "brews": 4
+   },
+   {
+    "date": "2026-10-03",
+    "system": "Krones",
+    "code": "CPT",
+    "brews": 1
+   },
+   {
+    "date": "2026-10-03",
+    "system": "Krones",
+    "code": "EAZY",
+    "brews": 4
+   },
+   {
+    "date": "2026-10-04",
+    "system": "Krones",
+    "code": "XPA",
+    "brews": 6
+   },
+   {
+    "date": "2026-10-05",
+    "system": "Krones",
+    "code": "GBWIND",
+    "brews": 5
+   },
+   {
+    "date": "2026-10-05",
+    "system": "Krones",
+    "code": "GBSUB",
+    "brews": 1
+   },
+   {
+    "date": "2026-10-06",
+    "system": "Krones",
+    "code": "XPA",
+    "brews": 6
+   },
+   {
+    "date": "2026-10-07",
+    "system": "DME",
+    "code": "LIMITED",
+    "brews": 1
+   },
+   {
+    "date": "2026-10-07",
+    "system": "DME",
+    "code": "LIMITED",
+    "brews": 1
+   },
+   {
+    "date": "2026-10-07",
+    "system": "DME",
+    "code": "LIMITED",
+    "brews": 1
+   },
+   {
+    "date": "2026-10-07",
+    "system": "Krones",
+    "code": "LPA",
+    "brews": 1
+   },
+   {
+    "date": "2026-10-07",
+    "system": "Krones",
+    "code": "LPA",
+    "brews": 1
+   },
+   {
+    "date": "2026-10-07",
+    "system": "Krones",
+    "code": "HAZY",
+    "brews": 4
+   },
+   {
+    "date": "2026-10-08",
+    "system": "DME",
+    "code": "LIMITED",
+    "brews": 1
+   },
+   {
+    "date": "2026-10-08",
+    "system": "DME",
+    "code": "LIMITED",
+    "brews": 1
+   },
+   {
+    "date": "2026-10-08",
+    "system": "DME",
+    "code": "LIMITED",
+    "brews": 1
+   },
+   {
+    "date": "2026-10-08",
+    "system": "Krones",
+    "code": "EAZY",
+    "brews": 6
+   },
+   {
+    "date": "2026-10-09",
+    "system": "Krones",
+    "code": "CPT",
+    "brews": 6
+   },
+   {
+    "date": "2026-10-10",
+    "system": "Krones",
+    "code": "XPA",
+    "brews": 6
+   },
+   {
+    "date": "2026-10-11",
+    "system": "Krones",
+    "code": "BLACK",
+    "brews": 1
+   },
+   {
+    "date": "2026-10-11",
+    "system": "Krones",
+    "code": "EAZY",
+    "brews": 4
+   },
+   {
+    "date": "2026-10-12",
+    "system": "DME",
+    "code": "CPT",
+    "brews": 2
+   },
+   {
+    "date": "2026-10-12",
+    "system": "Krones",
+    "code": "XPA",
+    "brews": 6
+   },
+   {
+    "date": "2026-10-13",
+    "system": "DME",
+    "code": "IPA",
+    "brews": 2
+   },
+   {
+    "date": "2026-10-13",
+    "system": "Krones",
+    "code": "HAZY",
+    "brews": 4
+   },
+   {
+    "date": "2026-10-13",
+    "system": "Krones",
+    "code": "HAZY",
+    "brews": 2
+   },
+   {
+    "date": "2026-10-14",
+    "system": "DME",
+    "code": "LAGER",
+    "brews": 1
+   },
+   {
+    "date": "2026-10-14",
+    "system": "DME",
+    "code": "BLACK",
+    "brews": 1
+   },
+   {
+    "date": "2026-10-14",
+    "system": "Krones",
+    "code": "EAZY",
+    "brews": 4
+   },
+   {
+    "date": "2026-10-14",
+    "system": "Krones",
+    "code": "HAZY",
+    "brews": 2
+   },
+   {
+    "date": "2026-10-15",
+    "system": "DME",
+    "code": "LAGER",
+    "brews": 1
+   },
+   {
+    "date": "2026-10-15",
+    "system": "DME",
+    "code": "BLACK",
+    "brews": 1
+   },
+   {
+    "date": "2026-10-15",
+    "system": "Krones",
+    "code": "CPT",
+    "brews": 6
+   }
+  ],
+  "skipped": [
+   {
+    "date": "2026-10-05",
+    "system": "DME",
+    "text": "KINGS BDAY"
+   },
+   {
+    "date": "2026-10-05",
+    "system": "Krones",
+    "text": "KINGS BDAY"
+   }
+  ]
+ },
+ "chemicals": [
+  {
+   "id": "bru-solv-1000lt-schutz-21378",
+   "name": "Bru-Solv 1000LT SCHUTZ 21378",
+   "description": "Bulk caustic detergent 1000L",
+   "supplier": "Ecolab",
+   "min": 5,
+   "seedCount": 7,
+   "rule": "topup+1",
+   "unit": "units",
+   "storage": "1 on M/D tank, 1 on 1100L Bund, 2 on caustic storage racking over permanent bund",
+   "discontinued": false,
+   "notes": []
+  },
+  {
+   "id": "super-stonekleen",
+   "name": "Super StoneKleen",
+   "description": "High Nitric Acid CIP Detergent",
+   "supplier": "Ecolab",
+   "min": 6,
+   "seedCount": 9,
+   "rule": "topup",
+   "unit": "units",
+   "storage": "shared 550L bund",
+   "discontinued": false,
+   "notes": []
+  },
+  {
+   "id": "trimeta-psf",
+   "name": "Trimeta PSF",
+   "description": "Nitric/Phosphoric Acid Detergent",
+   "supplier": "Ecolab",
+   "min": 5,
+   "seedCount": 5,
+   "rule": "topup+1",
+   "unit": "units",
+   "storage": "",
+   "discontinued": false,
+   "notes": []
+  },
+  {
+   "id": "lactic-acid",
+   "name": "Lactic Acid",
+   "description": "Food Grade Processing Aid - Brewhouse",
+   "supplier": "Sopura",
+   "min": 15,
+   "seedCount": 19,
+   "rule": "topup",
+   "unit": "units",
+   "storage": "Stored on a 550L bund behind CR2",
+   "discontinued": false,
+   "notes": []
+  },
+  {
+   "id": "topax-686-15-lt",
+   "name": "Topax 686 15 LT",
+   "description": "Foaming Chlorinated Detergent Sanitiser",
+   "supplier": "Ecolab",
+   "min": 10,
+   "seedCount": 10,
+   "rule": "topup",
+   "unit": "units",
+   "storage": "1 IBC stored on Caustic storage bund",
+   "discontinued": false,
+   "notes": []
+  },
+  {
+   "id": "alcohol-70-commercial-15lt-5149301",
+   "name": "Alcohol 70% Commercial 15LT 5149301",
+   "description": "70% Alcohol Solution",
+   "supplier": "Ecolab",
+   "min": 8,
+   "seedCount": 10,
+   "rule": "topup",
+   "unit": "units",
+   "storage": "stored separately on small bund located amongst acids",
+   "discontinued": false,
+   "notes": []
+  },
+  {
+   "id": "synergex-1000l",
+   "name": "Synergex 1000L",
+   "description": "5% Peracetic Acid",
+   "supplier": "Ecolab",
+   "min": 0.3,
+   "seedCount": 10,
+   "rule": "one",
+   "unit": "units",
+   "storage": "Oxidising acids stored separate from all other chems on extra large bund",
+   "discontinued": false,
+   "notes": [
+    "Min stock and count look like different units in ST26. Check before relying on this line."
+   ]
+  },
+  {
+   "id": "synergex-15-l",
+   "name": "Synergex 15 L",
+   "description": "PAA 1/2 Strength",
+   "supplier": "Ecolab",
+   "min": 3,
+   "seedCount": 2,
+   "rule": "topup",
+   "unit": "units",
+   "storage": "",
+   "discontinued": false,
+   "notes": []
+  },
+  {
+   "id": "22309plus-11h",
+   "name": "22309PLUS.11H",
+   "description": "Tannin Based Boiler Treatment",
+   "supplier": "Nalco",
+   "min": 2,
+   "seedCount": 0,
+   "rule": "topup",
+   "unit": "units",
+   "storage": "stored on small bund located amongst acids",
+   "discontinued": false,
+   "notes": []
+  },
+  {
+   "id": "acid700",
+   "name": "ACID700",
+   "description": "Water Treatment Acid (1000L IBC)",
+   "supplier": "Nalco",
+   "min": 0.45,
+   "seedCount": 0.38,
+   "rule": "topup",
+   "unit": "tank%",
+   "storage": "1 in use at DME TW, 1 in storage in acid area",
+   "discontinued": false,
+   "notes": []
+  },
+  {
+   "id": "alks500",
+   "name": "ALKS500",
+   "description": "Water Treatment Caustic (1000L IBC)",
+   "supplier": "Nalco",
+   "min": 0.3,
+   "seedCount": 0.27,
+   "rule": "topup",
+   "unit": "tank%",
+   "storage": "1 in use at DME TW, 1 in storage in caustic racking area",
+   "discontinued": false,
+   "notes": []
+  },
+  {
+   "id": "octave-fs",
+   "name": "Octave FS",
+   "description": "Foaming acid for external tank cleaning 25L",
+   "supplier": "Ecolab",
+   "min": 2,
+   "seedCount": 2,
+   "rule": "topup",
+   "unit": "units",
+   "storage": "stored separately on small bund located amongst acids",
+   "discontinued": false,
+   "notes": []
+  },
+  {
+   "id": "liquid-cip-cleaner",
+   "name": "Liquid CIP Cleaner",
+   "description": "Caustic for keg washing (suitable for CO2)",
+   "supplier": "Ecolab",
+   "min": 1,
+   "seedCount": 1,
+   "rule": "topup",
+   "unit": "units",
+   "storage": "1 x 200L drum stored on caustic racking",
+   "discontinued": false,
+   "notes": []
+  },
+  {
+   "id": "cellarwash",
+   "name": "Cellarwash",
+   "description": "Acid for keg washing (suitable for CO2) 1000L",
+   "supplier": "Ecolab",
+   "min": 1,
+   "seedCount": 1,
+   "rule": "topup",
+   "unit": "units",
+   "storage": "1 on M/D tank, 2 on 1100L bunds",
+   "discontinued": true,
+   "notes": []
+  },
+  {
+   "id": "sanimaxx",
+   "name": "SaniMaxx",
+   "description": "Detergent for the Canning Line Belts 15L",
+   "supplier": "Ecolab",
+   "min": 3,
+   "seedCount": 4,
+   "rule": "topup",
+   "unit": "units",
+   "storage": "stored on small bund located amongst acids",
+   "discontinued": false,
+   "notes": []
+  },
+  {
+   "id": "envirosan",
+   "name": "EnviroSan",
+   "description": "Sani bath sanitising detergent 25L",
+   "supplier": "Ecolab",
+   "min": 2,
+   "seedCount": 13,
+   "rule": "topup",
+   "unit": "units",
+   "storage": "stored on small bund located amongst acids",
+   "discontinued": false,
+   "notes": []
+  },
+  {
+   "id": "lubodrive",
+   "name": "LuboDrive",
+   "description": "keg line conveyor lube",
+   "supplier": "Ecolab",
+   "min": 1,
+   "seedCount": 3,
+   "rule": "topup",
+   "unit": "units",
+   "storage": "stored on small bund located amongst acids",
+   "discontinued": false,
+   "notes": []
+  },
+  {
+   "id": "boiler-salt",
+   "name": "boiler salt",
+   "description": "water softener for boiler",
+   "supplier": "Nalco",
+   "min": 10,
+   "seedCount": 93,
+   "rule": "topup",
+   "unit": "units",
+   "storage": "approx 1 years supply, stored in grain warehouse",
+   "discontinued": false,
+   "notes": []
+  },
+  {
+   "id": "glycol-pur-spec-6595",
+   "name": "(Glycol)Pur-spec 6595",
+   "description": "glycol for chillers 200L",
+   "supplier": "Sopura",
+   "min": 1,
+   "seedCount": 1,
+   "rule": "topup",
+   "unit": "units",
+   "storage": "food grade - no bund needed. storage in can warehouse",
+   "discontinued": false,
+   "notes": []
+  },
+  {
+   "id": "oxypak-s",
+   "name": "Oxypak S",
+   "description": "",
+   "supplier": "Ecolab",
+   "min": 6,
+   "seedCount": 6,
+   "rule": "topup",
+   "unit": "units",
+   "storage": "",
+   "discontinued": false,
+   "notes": []
+  }
+ ],
+ "suppliers": {
+  "Sopura": {
+   "label": "Sopura",
+   "rule": "Delivers Tuesday and Friday. Order by Thursday AM for Tuesday, by Tuesday for Friday.",
+   "mode": "cutoff",
+   "cutoffs": [
+    {
+     "orderDow": 4,
+     "deliverDow": 2,
+     "weekOffset": 1
+    },
+    {
+     "orderDow": 2,
+     "deliverDow": 5,
+     "weekOffset": 0
+    }
+   ]
+  },
+  "Ecolab": {
+   "label": "Ecolab",
+   "rule": "Order Friday for the following Friday delivery.",
+   "mode": "cutoff",
+   "cutoffs": [
+    {
+     "orderDow": 5,
+     "deliverDow": 5,
+     "weekOffset": 1
+    }
+   ]
+  },
+  "Nalco": {
+   "label": "Nalco",
+   "rule": "Delivery two weeks after the PO is raised. Order bulk refills at about 30% (caustic) or 45% (acid).",
+   "mode": "leadDays",
+   "leadDays": 14
+  }
+ },
+ "unmapped": {
+  "LIMITED @ DME": 6,
+  "LPA @ Krones": 2,
+  "BLACK @ Krones": 1
+ }
+}
