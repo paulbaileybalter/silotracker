@@ -21,7 +21,7 @@ window.App = (function () {
   App.daysAgo = d => F.diffDays(d, App.todayISO());
 
   /* ---------- state ---------- */
-  const blank = () => ({ v: 1, updatedAt: 0, readings: [], deliveries: [], settings: {}, st26: null, seeded: false, lastImport: null, archives: [] });
+  const blank = () => ({ v: 1, updatedAt: 0, readings: [], deliveries: [], settings: {}, st26: null, seeded: false, lastImport: null, archives: [], undo: null });
   const clean = s => { const o = Object.assign(blank(), s); delete o.stocktakes; delete o.chem; return o; };   // chemical entries from the earlier version are dropped
   App.state = blank();
   function loadLocal() { try { const s = JSON.parse(localStorage.getItem(KEY)); if (s && s.v === 1) App.state = clean(s); } catch (e) { /* first run */ } }
@@ -91,17 +91,46 @@ window.App = (function () {
     });
   }
   // Put the estimates and deliveries from a parsed ST26 into the site's own records.
+  // Records exactly as an ST26 upload creates them (used by upload and by "reset to this upload").
+  const stReading = out => { const L = out.levels; return { id: App.uid(), date: out.latestDate, silo1: L.silo1.kg, silo2: L.pool.silo2, silo3: L.pool.silo3, silo4: L.silo4.kg,
+    source: 'estimate', from: 'st26', asOf: out.asOf, savedAt: new Date().toISOString() }; };
+  const stDeliveries = out => out.deliveries.map(n => ({ id: App.uid(), group: n.group, date: n.date, qty: n.qty, po: n.po || '', source: 'st26', status: 'booked' }));
   App.applyST26 = function (out) {
-    const S = App.state, L = out.levels, date = out.latestDate;
+    const S = App.state, date = out.latestDate;
     S.readings = S.readings.filter(x => x.date !== date);
-    S.readings.push({ id: App.uid(), date, silo1: L.silo1.kg, silo2: L.pool.silo2, silo3: L.pool.silo3, silo4: L.silo4.kg,
-      source: 'estimate', from: 'st26', asOf: out.asOf, savedAt: new Date().toISOString() });
+    S.readings.push(stReading(out));
     // ST26 is the master for deliveries: replace earlier ST26 deliveries, and drop hand-entered ones it now covers
-    S.deliveries = S.deliveries.filter(d => d.source !== 'st26' && !out.deliveries.some(n => n.group === d.group && n.date === d.date));
-    out.deliveries.forEach(n => S.deliveries.push({ id: App.uid(), group: n.group, date: n.date, qty: n.qty, po: n.po || '', source: 'st26', status: 'booked' }));
-    S.seeded = true;
+    S.deliveries = S.deliveries.filter(d => d.source !== 'st26' && !out.deliveries.some(n => n.group === d.group && n.date === d.date)).concat(stDeliveries(out));
+    S.seeded = true; S.undo = null;
     S.lastImport = { at: new Date().toISOString(), file: out.source, estimatesDate: date, deliveries: out.deliveries.length, scheduleTo: out.schedule.lastBrew, notes: out.notes || [] };
   };
+
+  /* ---------- changes made on the site since the last upload, and rolling them back ---------- */
+  App.changesSinceUpload = function () {
+    const S = App.state, d = App.data(), at = (S.lastImport && S.lastImport.at) || '';
+    // estimates typed on the site after the upload, or dated later than the upload's own estimates (those would override it)
+    const newReadings = S.readings.filter(r => r.from !== 'st26' && ((r.savedAt || '') > at || r.date > d.latestDate));
+    const addedDeliveries = S.deliveries.filter(x => x.source !== 'st26' && (x.addedAt || '') > at);
+    const have = new Set(S.deliveries.filter(x => x.source === 'st26').map(x => x.group + '|' + x.date));
+    const removed = (d.deliveries || []).filter(x => !have.has(x.group + '|' + x.date));
+    const received = S.deliveries.filter(x => x.source === 'st26' && x.status === 'received');
+    return { newReadings, addedDeliveries, removed, received, count: newReadings.length + addedDeliveries.length + removed.length + received.length };
+  };
+  App.rollbackToUpload = function () {
+    const S = App.state, d = App.data(), c = App.changesSinceUpload();
+    if (!c.count) return false;
+    S.undo = { at: new Date().toISOString(), readings: JSON.parse(JSON.stringify(S.readings)), deliveries: JSON.parse(JSON.stringify(S.deliveries)) };   // one-step safety net
+    const dropR = new Set(c.newReadings.map(r => r.id)), dropD = new Set(c.addedDeliveries.map(x => x.id));
+    S.readings = S.readings.filter(r => !dropR.has(r.id) && r.date !== d.latestDate);
+    S.readings.push(stReading(d));
+    S.deliveries = S.deliveries.filter(x => x.source !== 'st26' && !dropD.has(x.id) && !d.deliveries.some(n => n.group === x.group && n.date === x.date)).concat(stDeliveries(d));
+    return true;
+  };
+  App.undoRollback = function () {
+    const S = App.state; if (!S.undo) return false;
+    S.readings = S.undo.readings; S.deliveries = S.undo.deliveries; S.undo = null; return true;
+  };
+
   App.importArchive = async function (file) {
     if (!file) return;
     if (!/\.xls[xm]$/i.test(file.name)) return App.toast('Choose an older stock tool (.xlsx)');

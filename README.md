@@ -31,6 +31,7 @@ Plots every silo estimate on record: the full history in ST26's Bulk Demand shee
   - your **latest silo estimates** (the Silo 1 Volume, Silo 2 / Silo 3 Adjusted Volume and Silo 4 Volume lines on Bulk Demand), and
   - the **deliveries** you've typed on the Silo 1 DME Refill, Silo 2+3 Krones and Silo 4 Wheat Krones Refill lines, with PO numbers.
 - The site counts those deliveries and only suggests extra ones on top. It also warns if a booked delivery would take a silo over the 28 t working limit.
+- **Rolling back:** the Latest ST26 card shows how many changes you've made on the site since the last upload (estimates typed, deliveries added or removed, deliveries marked received). **Reset to this upload** undoes all of them and puts the estimates and deliveries back exactly as the workbook had them; **Undo last reset** brings your changes back. Settings and older stock tools are never touched.
 - You can still type a fresh estimate or add a delivery directly on the site. A later ST26 upload replaces ST26-sourced deliveries and any hand-entered delivery on the same silo and day.
 - The first time anyone opens the site it starts from the ST26 that was bundled with it. To refresh that bundled copy instead: `npm install`, then `npm run build-data -- path/to/ST_26.xlsx`, and commit `public/data/st26.json`.
 

@@ -112,6 +112,20 @@
     return null;
   }
 
+
+  function changesRow(S) {
+    const c = App.changesSinceUpload(), li = S.lastImport;
+    const parts = [];
+    if (c.newReadings.length) parts.push(`${c.newReadings.length} estimate${c.newReadings.length === 1 ? '' : 's'} entered on the site`);
+    if (c.addedDeliveries.length) parts.push(`${c.addedDeliveries.length} delivery added`);
+    if (c.removed.length) parts.push(`${c.removed.length} ST26 delivery removed`);
+    if (c.received.length) parts.push(`${c.received.length} marked received`);
+    return `<div class="row" style="margin-top:12px;gap:10px">${c.count
+      ? `<span class="chip chip--warn">${c.count} change${c.count === 1 ? '' : 's'} since this upload</span><span class="muted" style="font-size:13px">${esc(parts.join(', '))}.</span><button class="btn btn--sm" id="rbBtn" type="button">Reset to this upload</button>`
+      : `<span class="chip chip--ok">No changes since this upload${li ? '' : ''}</span>`}
+      ${S.undo ? `<button class="btn btn--sm" id="undoBtn" type="button">Undo last reset</button>` : ''}</div>`;
+  }
+
   /* ---------- ST26 upload card ---------- */
   function st26Card(S, data) {
     const li = S.lastImport;
@@ -123,6 +137,7 @@
       <p class="sub">Upload the workbook and the site picks up the brewing schedule, recipes, your latest silo estimates and the deliveries you've typed on the refill lines. The file is read in your browser and isn't sent anywhere.</p></div></div>
       <div class="drop" id="drop" tabindex="0" role="button" aria-label="Upload the ST26 workbook"><b>Drop ST_26.xlsx here</b><span>or click to choose the file</span></div>
       <p class="muted" style="font-size:13px;margin:12px 0 0">${sumLine}</p>
+      ${changesRow(S)}
       ${notes.map(n => `<p class="faint" style="font-size:12.5px;margin:4px 0 0">${esc(n.replace(/\d{4}-\d{2}-\d{2}/g, x => App.fmtD(x)))}</p>`).join('')}</section>`;
   }
 
@@ -338,6 +353,19 @@
       ['dragleave', 'drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('over'); }));
       drop.addEventListener('drop', e => App.importST26(e.dataTransfer.files[0]));
     }
+    const rb = App.$('#rbBtn', el);
+    if (rb) rb.addEventListener('click', () => {
+      const c = App.changesSinceUpload(), li = S.lastImport;
+      const lines = [];
+      c.newReadings.forEach(r => lines.push('- Silo estimate for ' + App.fmtD(r.date) + (r.from ? '' : ' (entered here)')));
+      c.addedDeliveries.forEach(x => lines.push('- Delivery you added: ' + App.fmtD(x.date) + ', ' + App.t(x.qty) + ' t'));
+      c.removed.forEach(x => lines.push('- ST26 delivery you removed (brought back): ' + App.fmtD(x.date) + ', ' + App.t(x.qty) + ' t'));
+      c.received.forEach(x => lines.push('- Delivery marked received (set back to booked): ' + App.fmtD(x.date)));
+      if (!confirm('Reset to the ST26 you uploaded' + (li ? ' on ' + new Date(li.at).toLocaleString('en-AU', { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' }) : '') + '?\n\nThis undoes:\n' + lines.join('\n') + '\n\nSettings and older stock tools are not touched. You can undo the reset afterwards.')) return;
+      App.rollbackToUpload(); App.save(); App.render(); App.toast('Reset to the latest ST26 upload');
+    });
+    const ub = App.$('#undoBtn', el);
+    if (ub) ub.addEventListener('click', () => { App.undoRollback(); App.save(); App.render(); App.toast('Your changes are back'); });
     const save = App.$('#saveRead', el);
     if (save) save.addEventListener('click', () => {
       const prev = P.reading, rec = { id: App.uid(), date: App.$('#rdDate', el).value || today, source: readSource, savedAt: new Date().toISOString(), entered: [] };
@@ -357,7 +385,7 @@
       App.$('#bkAdd', el).addEventListener('click', () => {
         const date = App.$('#bkDate', el).value, q = App.num(App.$('#bkQty', el).value);
         if (!date || !q || q <= 0) return App.toast('Enter a date and an amount');
-        S.deliveries.push({ id: App.uid(), group: grp.value, date, qty: Math.round(q * 1000), status: 'booked' });
+        S.deliveries.push({ id: App.uid(), group: grp.value, date, qty: Math.round(q * 1000), status: 'booked', addedAt: new Date().toISOString() });
         App.save(); App.toast('Delivery added'); App.render();
       });
     }
