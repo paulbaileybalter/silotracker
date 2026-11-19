@@ -41,22 +41,38 @@ const json = (obj, status = 200) => new Response(JSON.stringify(obj), { status, 
 const html = (body, status = 200) => new Response(body, { status, headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store' } });
 
 function loginPage(error, next) {
-  const logo = '<svg viewBox="0 0 161 161" fill="#47D7AC" aria-hidden="true" width="64" height="64"><path d="M136.3,70.4l-9.4-9.4c-1.6-1.6-4.3-1.6-6,0-1.6,1.6-1.6,4.3,0,6l2.3,2.3c-9.6,13.2-25.2,21.7-42.7,21.7s-33.1-8.6-42.7-21.8l2.3-2.3c1.6-1.6,1.6-4.3,0-6-1.6-1.6-4.3-1.6-6,0l-9.4,9.4c-1.6,1.6-1.6,4.3,0,6,.8.8,1.9,1.2,3,1.2s2.2-.4,3-1.2l1.1-1.1c11.2,14.7,28.9,24.2,48.7,24.2s37.5-9.5,48.7-24.2l1.1,1.1c.8.8,1.9,1.2,3,1.2s2.2-.4,3-1.2c1.6-1.6,1.6-4.3,0-6"/><path d="M152.5,8.5v144H8.5V8.5h144M161,0H0v161h161V0h0Z"/></svg>';
-  return `<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex">
+  return `<!DOCTYPE html><html lang="en-AU"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><meta name="theme-color" content="#47D7AC">
 <title>Sign in · Silo Grain Tracker</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
-<style>*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;background:#fff;font:15px/1.5 Inter,system-ui,sans-serif;color:#14161a}
-.box{width:min(380px,92vw);padding:34px 30px;border:1px solid rgba(0,0,0,.08);border-left:4px solid #47D7AC;border-radius:18px;box-shadow:0 8px 30px -14px rgba(20,22,26,.2)}
-h1{font:700 22px 'Space Grotesk',system-ui,sans-serif;margin:14px 0 2px}p{margin:0 0 20px;color:#55585F;font-size:13.5px}
-label{display:block;font-weight:600;font-size:13px;margin-bottom:6px}input{width:100%;padding:11px 12px;border:1.5px solid rgba(0,0,0,.14);border-radius:10px;font:inherit}
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="preload" href="/fonts/lexend-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face{font-family:'Lexend';src:url('/fonts/lexend-latin-wght-normal.woff2') format('woff2');font-weight:100 900;font-display:swap}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;display:grid;place-items:center;background:#fff;font:15px/1.45 'Lexend','Segoe UI',system-ui,sans-serif;color:#000;border-top:5px solid;border-image:linear-gradient(90deg,#47D7AC 0 25%,#FDAA63 25% 50%,#7566A0 50% 75%,#99D6EA 75% 100%) 1;overflow:hidden}
+.bubbles{position:fixed;inset:0;pointer-events:none;overflow:hidden}
+.bubbles span{position:absolute;bottom:-40px;border-radius:50%;background:radial-gradient(circle at 30% 30%,rgba(255,255,255,.95),rgba(71,215,172,.12));border:1px solid rgba(71,215,172,.28);animation:rise linear infinite}
+@keyframes rise{0%{transform:translateY(0) scale(1);opacity:0}10%{opacity:.7}100%{transform:translateY(-115vh) scale(1.15);opacity:0}}
+@media (prefers-reduced-motion:reduce){.bubbles{display:none}}
+.box{position:relative;width:min(380px,92vw);padding:28px 26px;border:1px solid #E7E5DE;border-top:4px solid #47D7AC;border-radius:14px;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.04),0 6px 16px rgba(0,0,0,.05)}
+.logo{width:56px;height:56px;display:block}
+.kicker{display:block;margin-top:14px;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:#7566A0;font-weight:600}
+h1{font-size:22px;font-weight:700;letter-spacing:-.01em;margin:3px 0 4px}
+p{margin:0 0 18px;color:#6B685D;font-size:13px}
+label{display:block;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:#6B685D;font-weight:600;margin-bottom:6px}
+input[type=password]{width:100%;padding:10px 12px;border:1px solid #E7E5DE;border-radius:9px;font:inherit}
 input:focus{outline:none;border-color:#47D7AC;box-shadow:0 0 0 3px rgba(71,215,172,.25)}
-button{margin-top:16px;width:100%;padding:12px;border:0;border-radius:999px;background:#14161a;color:#fff;font:600 15px Inter,sans-serif;cursor:pointer}
-.err{background:#fdeceb;color:#b3382c;border-radius:10px;padding:9px 12px;font-size:13px;margin-bottom:14px}</style></head>
-<body><form class="box" method="POST" action="/_auth/login">${logo}<h1>Silo Grain Tracker</h1><p>Balter Brewing. Enter the password to continue.</p>
+button{margin-top:16px;width:100%;padding:11px;border:1px solid #47D7AC;border-radius:10px;background:#47D7AC;color:#000;font:600 14px 'Lexend',system-ui,sans-serif;cursor:pointer;transition:background .12s,color .12s}
+button:hover{background:#000;color:#fff;border-color:#000}
+.err{background:#FFF1E4;border:1px solid #FDAA63;border-radius:12px;padding:9px 12px;font-size:13px;margin-bottom:14px}
+</style></head>
+<body><div class="bubbles" id="bubbles" aria-hidden="true"></div>
+<form class="box" method="POST" action="/_auth/login"><img class="logo" src="/assets/logo.svg" alt="Balter Brewing" width="56" height="56"><span class="kicker">Balter Brewing · Supply Planning</span><h1>Silo Grain Tracker</h1><p>Enter the password to continue.</p>
 ${error ? '<div class="err" role="alert">That password isn\'t right. Try again.</div>' : ''}
 <input type="hidden" name="next" value="${next.replace(/"/g, '&quot;')}">
 <label for="pw">Password</label><input id="pw" name="password" type="password" autocomplete="current-password" autofocus required>
-<button type="submit">Sign in</button></form></body></html>`;
+<button type="submit">Sign in</button></form>
+<script>(function(){var h=document.getElementById('bubbles');for(var i=0;i<14;i++){var s=document.createElement('span'),z=8+Math.random()*26;s.style.cssText='left:'+Math.random()*100+'%;width:'+z+'px;height:'+z+'px;animation-duration:'+(14+Math.random()*16)+'s;animation-delay:'+(-Math.random()*24)+'s';h.appendChild(s);}})();</script>
+</body></html>`;
 }
 
 /* ---------- shared storage API ---------- */
@@ -86,6 +102,8 @@ export default {
     if (!env.SITE_PASSWORD || !env.AUTH_SECRET) {
       return new Response('This site is not configured yet. In Cloudflare, open the Worker > Settings > Variables and secrets and add the secrets SITE_PASSWORD and AUTH_SECRET, then redeploy.', { status: 500 });
     }
+    // fonts and logo are public so the sign-in page can use them (no data in them)
+    if (request.method === 'GET' && (url.pathname.startsWith('/fonts/') || url.pathname === '/assets/logo.svg' || url.pathname === '/assets/favicon.svg')) return env.ASSETS.fetch(request);
     const authed = await validToken(env, getCookie(request, COOKIE));
 
     if (url.pathname === '/_auth/logout') {

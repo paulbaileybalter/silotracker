@@ -1,43 +1,44 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-AU">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Silo Grain Tracker · Balter Brewing</title>
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#47D7AC">
-<link rel="icon" href="assets/smiley-box-logo.svg" type="image/svg+xml">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=1">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="preload" href="fonts/lexend-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/style.css?v=2">
 </head>
 <body>
+<div class="bubbles" id="bubbles" aria-hidden="true"></div>
 <header class="topbar">
-  <div class="topbar__in">
+  <div class="header-in">
+    <img class="logo" src="assets/logo.svg" alt="Balter Brewing" width="44" height="44">
     <div class="brand">
-      <svg viewBox="0 0 161 161" fill="currentColor" aria-hidden="true"><path d="M136.3,70.4l-9.4-9.4c-1.6-1.6-4.3-1.6-6,0-1.6,1.6-1.6,4.3,0,6l2.3,2.3c-9.6,13.2-25.2,21.7-42.7,21.7s-33.1-8.6-42.7-21.8l2.3-2.3c1.6-1.6,1.6-4.3,0-6-1.6-1.6-4.3-1.6-6,0l-9.4,9.4c-1.6,1.6-1.6,4.3,0,6,.8.8,1.9,1.2,3,1.2s2.2-.4,3-1.2l1.1-1.1c11.2,14.7,28.9,24.2,48.7,24.2s37.5-9.5,48.7-24.2l1.1,1.1c.8.8,1.9,1.2,3,1.2s2.2-.4,3-1.2c1.6-1.6,1.6-4.3,0-6"/><path d="M152.5,8.5v144H8.5V8.5h144M161,0H0v161h161V0h0Z"/></svg>
-      <div class="brand__t"><b>Silo Grain Tracker</b><span>Balter Brewing</span></div>
+      <span class="kicker">Balter Brewing · Supply Planning</span>
+      <h1>Silo Grain Tracker</h1>
     </div>
-    <div class="top-actions">
+    <div class="spacer"></div>
+    <div class="actions top-actions">
       <span class="pill" title="Save status"><span class="dot busy" id="syncDot"></span><span id="syncText">Loading…</span><button class="btn btn--sm" id="syncNow" type="button" style="border:none;padding:2px 6px" aria-label="Check for updates from another device">↻</button></span>
-      <button class="btn" id="importBtn" type="button">Upload latest ST26</button>
+      <button class="btn btn--primary" id="importBtn" type="button">Upload latest ST26</button>
       <input type="file" id="importFile" accept=".xlsx,.xlsm" hidden>
       <input type="file" id="archiveFile" accept=".xlsx,.xlsm" hidden>
       <a class="btn" href="/_auth/logout">Log out</a>
     </div>
   </div>
-  <nav class="tabs" role="tablist" aria-label="Sections">
+  <nav class="tabs jump" role="tablist" aria-label="Sections">
     <button class="tab" role="tab" data-tab="grain" aria-selected="true">Grain silos</button>
     <button class="tab" role="tab" data-tab="history" aria-selected="false">Silo history</button>
     <button class="tab" role="tab" data-tab="settings" aria-selected="false">Settings</button>
   </nav>
 </header>
-<main>
+<main class="page">
   <section id="tab-grain" role="tabpanel"></section>
   <section id="tab-history" role="tabpanel" hidden></section>
   <section id="tab-settings" role="tabpanel" hidden></section>
-  <footer><svg viewBox="0 0 161 161" fill="currentColor" aria-hidden="true"><path d="M136.3,70.4l-9.4-9.4c-1.6-1.6-4.3-1.6-6,0-1.6,1.6-1.6,4.3,0,6l2.3,2.3c-9.6,13.2-25.2,21.7-42.7,21.7s-33.1-8.6-42.7-21.8l2.3-2.3c1.6-1.6,1.6-4.3,0-6-1.6-1.6-4.3-1.6-6,0l-9.4,9.4c-1.6,1.6-1.6,4.3,0,6,.8.8,1.9,1.2,3,1.2s2.2-.4,3-1.2l1.1-1.1c11.2,14.7,28.9,24.2,48.7,24.2s37.5-9.5,48.7-24.2l1.1,1.1c.8.8,1.9,1.2,3,1.2s2.2-.4,3-1.2c1.6-1.6,1.6-4.3,0-6"/><path d="M152.5,8.5v144H8.5V8.5h144M161,0H0v161h161V0h0Z"/></svg><span>Balter Brewing · grain silo planning</span></footer>
+  <footer class="foot">Balter Brewing · Silo grain tracker · Estimates, bookings and settings are saved to the shared store; use Backup in Settings for a copy. <a href="/_auth/logout">Sign out</a></footer>
 </main>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script src="js/st26-parser.js"></script>

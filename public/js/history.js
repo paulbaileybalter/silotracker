@@ -70,7 +70,7 @@
     const days = F.eachDay(start, F.addDays(today, fcDays)), dayIdx = {}; days.forEach((d, i) => { dayIdx[d] = i; });
     const log = M.deliveryLog.filter(d => d.date >= start && d.date < today);
 
-    let h = `<section class="card" data-acc="purple"><div class="card__h"><div><h2>Silo quantities over time</h2>
+    let h = `<section class="card" data-acc="purple"><div class="card__h"><div><span class="eyebrow">History</span><h2>Silo quantities over time</h2>
       <p class="sub">Every silo estimate on record: ${M.history.length} sets from ST26${M.stats.length ? ' and older stock tools' : ''} (${recs.length ? App.fmtS(first) + ' ' + first.slice(0, 4) : 'none'} onwards) plus anything entered on this site. These are hand estimates (about ±${App.t(st.uncertaintyKg)} t), so small ups and downs are normal. Radar readings will appear as solid dots once fitted. Black dots mark deliveries.</p></div>
       <div class="row"><div class="seg" id="hRange">${Object.keys(RANGES).map(k => `<button type="button" data-r="${k}" aria-pressed="${range === k}">${RANGES[k][0]}</button>`).join('')}</div>
       <div class="seg" id="hMode"><button type="button" data-m="group" aria-pressed="${mode === 'group'}">By supply group</button><button type="button" data-m="silo" aria-pressed="${mode === 'silo'}">Each silo</button></div></div></div>
@@ -100,11 +100,11 @@
 
     /* table */
     const rows = recs.slice().reverse().slice(0, shown);
-    h += `<section class="card" data-acc="ink"><div class="card__h"><div><h2>Every estimate</h2><p class="sub">Newest first, in tonnes. A dash means that silo wasn't estimated that day. Silos 2 + 3 is the sum of the two (a blank counts as empty when the other has an estimate).</p></div></div>
+    h += `<section class="card" data-acc="ink"><div class="card__h"><div><span class="eyebrow">Records</span><h2>Every estimate</h2><p class="sub">Newest first, in tonnes. A dash means that silo wasn't estimated that day. Silos 2 + 3 is the sum of the two (a blank counts as empty when the other has an estimate).</p></div></div>
       <div class="tscroll"><table><thead><tr><th>Date</th><th class="num">Silo 1</th><th class="num">Silo 2</th><th class="num">Silo 3</th><th class="num">Silo 4</th><th class="num">Silos 2 + 3</th><th>Source</th></tr></thead><tbody>
       ${rows.map(r => { const srcs = [...new Set(Object.values(r.src))]; return `<tr><td>${App.fmtD(r.date)} <span class="faint">${r.date.slice(0, 4)}</span></td>${['silo1', 'silo2', 'silo3', 'silo4', 'pool'].map(k => `<td class="num">${tn(r[k])}</td>`).join('')}<td>${srcs.map(x => `<span class="chip ${x === 'Radar' ? 'chip--ok' : x === 'Entered here' ? 'chip--info' : 'chip--n'}">${esc(x)}</span>`).join(' ')}</td></tr>`; }).join('')}
       </tbody></table></div>${recs.length > shown ? `<div style="margin-top:12px"><button class="btn btn--sm" id="hMore" type="button">Show 30 more (${recs.length - shown} left)</button></div>` : ''}</section>`;
-    h += `<section class="card" data-acc="sky"><div class="card__h"><div><h2>Older stock tools</h2>
+    h += `<section class="card" data-acc="sky"><div class="card__h"><div><span class="eyebrow">Archive</span><h2>Older stock tools</h2>
       <p class="sub">Add an older stock tool workbook (any file with a Bulk Demand sheet) to push the history further back. The current ST26 always wins on days both cover. Earliest estimate on record: <b>${App.fmtD(first)} ${first.slice(0, 4)}</b>.</p></div><button class="btn" id="hArch" type="button">Add an older stock tool</button></div>
       ${M.stats.length ? M.stats.map(a => { const up = (App.state.archives || []).some(x => x.source === a.source);
         return `<div class="del" style="margin-top:8px"><div class="row" style="justify-content:space-between"><div><b>${esc(a.source)}</b> <span class="muted">${a.total} estimate sets, ${a.deliveries} deliveries, ${App.fmtS(a.from)} ${a.from.slice(0, 4)} to ${App.fmtS(a.to)} ${a.to.slice(0, 4)}</span></div>${up ? `<button class="btn btn--sm btn--danger" data-rmarch="${esc(a.source)}" type="button">Remove</button>` : '<span class="chip chip--n">Bundled with the site</span>'}</div>

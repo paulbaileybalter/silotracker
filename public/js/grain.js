@@ -48,7 +48,7 @@
     let h = st26Card(S, data) + notices(P, data, today, age);
 
     /* --- silo board --- */
-    h += `<section class="card" data-acc="mint"><div class="card__h"><div><h2>Silo levels</h2>
+    h += `<section class="card" data-acc="mint"><div class="card__h"><div><span class="eyebrow">Right now</span><h2>Silo levels</h2>
       <p class="sub">These are estimates from the sight glasses and knocking on the shell, so every figure carries a range (±${App.t(unc(readSource))} t per silo). Enter your best guess in tonnes. When the radars go in, switch the source to Radar and the ranges tighten.</p></div>
       <div class="row"><label class="field">Estimate date<input type="date" id="rdDate" value="${today}"></label>
       <div class="field">Source<div class="seg" id="srcSeg"><button type="button" data-src="estimate" aria-pressed="${readSource === 'estimate'}">Estimate</button><button type="button" data-src="radar" aria-pressed="${readSource === 'radar'}">Radar</button></div></div></div></div>
@@ -68,7 +68,7 @@
 
     /* --- plan --- */
     if (rd) {
-      h += `<section class="card" data-acc="apricot"><div class="card__h"><div><h2>When to order grain</h2>
+      h += `<section class="card" data-acc="apricot"><div class="card__h"><div><span class="eyebrow">Delivery plan</span><h2>When to order grain</h2>
         <p class="sub">Built from the ST26 brewing schedule and recipes. Pale malt: ${days(st.paleDays)}, booked at least ${st.paleNoticeDays * 24} hours ahead, ${App.t(st.paleDelivery)} t trucks that fill Silo 2 first (it moves grain on to Silo 3) with the rest going to Silo 1. Wheat malt: ${days(st.wheatDays)}, booked at least ${st.wheatNoticeDays} days ahead, ${App.t(st.wheatDelivery)} t loads. Silos are treated as holding ${App.t(st.cap)} t.</p></div></div>`;
       h += paleRow(P, today, st) + planRow('silo4', P, today, st);
       h += '</section>';
@@ -133,7 +133,7 @@
       ? `Last upload: <b>${esc(li.file)}</b>, ${new Date(li.at).toLocaleString('en-AU', { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' })}. Estimates as of ${App.fmtD(li.estimatesDate)}, ${li.deliveries} deliver${li.deliveries === 1 ? 'y' : 'ies'} entered, schedule to ${App.fmtD(li.scheduleTo)}.`
       : `Showing the ST26 that came with the site: estimates as of ${App.fmtD(data.latestDate)}, ${data.deliveries.length} deliveries entered, schedule to ${App.fmtD(data.schedule.lastBrew)}.`;
     const notes = (li ? li.notes : data.notes) || [];
-    return `<section class="card" data-acc="sky"><div class="card__h"><div><h2>Latest ST26</h2>
+    return `<section class="card" data-acc="sky"><div class="card__h"><div><span class="eyebrow">Source data</span><h2>Latest ST26</h2>
       <p class="sub">Upload the workbook and the site picks up the brewing schedule, recipes, your latest silo estimates and the deliveries you've typed on the refill lines. The file is read in your browser and isn't sent anywhere.</p></div></div>
       <div class="drop" id="drop" tabindex="0" role="button" aria-label="Upload the ST26 workbook"><b>Drop ST_26.xlsx here</b><span>or click to choose the file</span></div>
       <p class="muted" style="font-size:13px;margin:12px 0 0">${sumLine}</p>
@@ -280,7 +280,7 @@
     const keys = Object.keys(a);
     if (keys.length) ah = `<details style="margin-top:14px"><summary class="muted" style="cursor:pointer;font-weight:600">Brews in the schedule that need checking (${keys.length})</summary><ul style="font-size:13px;margin:8px 0 0">` +
       keys.map(k => `<li><b>${esc(k)}</b> × ${a[k].brews}: ${a[k].how === 'none' ? 'no silo recipe found in ST26, counted as 0 kg.' : 'no recipe for this brewhouse, using the other brewhouse\'s recipe (' + a[k].kgPerBrew + ' kg pale malt per brew).'}</li>`).join('') + '</ul></details>';
-    return `<section class="card" data-acc="purple"><div class="card__h"><div><h2>Grain use trends</h2>
+    return `<section class="card" data-acc="purple"><div class="card__h"><div><span class="eyebrow">Usage</span><h2>Grain use trends</h2>
       <p class="sub">Silo grain per brew comes from the ST26 recipes, multiplied by the brews on the schedule (Silo 1 ← DME brews, Silos 2 + 3 and Silo 4 ← Krones brews). Weekly view shows the last four weeks of brewing too. Hatched bars are estimates beyond the schedule.</p></div>
       <div class="seg" id="usageSeg"><button type="button" data-m="day" aria-pressed="${usageMode === 'day'}">By day</button><button type="button" data-m="week" aria-pressed="${usageMode === 'week'}">By week</button></div></div>
       <div id="usageChart" class="ch"></div>
@@ -322,7 +322,7 @@
     }).join('');
     const splitNote = splitKeys.sort().map(k => { const ds = splits[k].slice().sort((a, b) => a.group === 'pool' ? -1 : 1), po = ds.map(d => d.po).find(Boolean); return `${App.fmtD(k)}: ${ds.map(d => delName(d.group) + ' ' + App.t(d.qty) + ' t').join(' + ')} = ${App.t(ds.reduce((s, d) => s + d.qty, 0))} t${po ? ' on ' + esc(po) : ''} (one truck: Silo 2 first, the rest to Silo 1).`; });
     const nextDay = g => { const n = F.groupNotice(g, st); let d = F.addDays(today, n); while (!F.groupDays(g, st).includes(F.dow(d))) d = F.addDays(d, 1); return d; };
-    return `<section class="card" data-acc="sky"><div class="card__h"><div><h2>Booked deliveries</h2>
+    return `<section class="card" data-acc="sky"><div class="card__h"><div><span class="eyebrow">Bookings</span><h2>Booked deliveries</h2>
       <p class="sub">Deliveries typed on the refill lines in ST26 appear here after each upload, and every forecast counts them, so the plan only asks for deliveries on top of these. You can also add one by hand (for a split truck, add one line per silo). Mark a delivery received once it arrives, then update the silo estimates.</p></div></div>
       ${list.length ? `<div class="tscroll"><table><thead><tr><th>Silo</th><th>Delivery date</th><th class="num">Amount</th><th>PO</th><th>Status</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>` : '<div class="empty">No deliveries booked yet.</div>'}
       ${splitNote.length ? `<p class="muted" style="font-size:12.5px;margin:10px 0 0">${splitNote.join('<br>')}</p>` : ''}
@@ -334,7 +334,7 @@
 
   function historyCard(S) {
     const rs = S.readings.slice().sort((a, b) => a.date < b.date ? 1 : a.date > b.date ? -1 : (b.savedAt || '') < (a.savedAt || '') ? -1 : 1);
-    return `<section class="card" data-acc="ink"><div class="card__h"><div><h2>Estimate history</h2><p class="sub">Every saved set of silo estimates. Comparing these with the forecast over time will show how far the estimates drift, and gives a baseline for the radars.</p></div></div>
+    return `<section class="card" data-acc="ink"><div class="card__h"><div><span class="eyebrow">Estimates</span><h2>Estimate history</h2><p class="sub">Every saved set of silo estimates. Comparing these with the forecast over time will show how far the estimates drift, and gives a baseline for the radars.</p></div></div>
       <div class="tscroll"><table><thead><tr><th>Date</th><th class="num">Silo 1</th><th class="num">Silo 2</th><th class="num">Silo 3</th><th class="num">Silo 4</th><th>Source</th><th></th></tr></thead><tbody>
       ${rs.slice(0, 20).map(r => `<tr><td>${App.fmtD(r.date)}</td>${['silo1', 'silo2', 'silo3', 'silo4'].map(k => `<td class="num">${App.t(r[k])} t</td>`).join('')}<td>${r.source === 'radar' ? 'Radar' : 'Estimate'}</td><td class="num"><button class="btn btn--sm btn--danger" data-delread="${r.id}">Delete</button></td></tr>`).join('')}
       </tbody></table></div></section>`;

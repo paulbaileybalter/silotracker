@@ -13,7 +13,7 @@
   function render(el) {
     const st = App.settings(), d = App.data();
     const t = kg => App.t(kg);
-    let h = `<section class="card" data-acc="mint"><div class="card__h"><div><h2>Silo and delivery rules</h2><p class="sub">These drive every grain forecast. Tonnes unless stated.</p></div><button class="btn btn--primary" id="saveSet" type="button">Save settings</button></div>
+    let h = `<section class="card" data-acc="mint"><div class="card__h"><div><span class="eyebrow">Rules</span><h2>Silo and delivery rules</h2><p class="sub">These drive every grain forecast. Tonnes unless stated.</p></div><button class="btn btn--primary" id="saveSet" type="button">Save settings</button></div>
       <div class="grid2">
         <label class="field">Working capacity per silo (t)<input type="number" step="0.5" data-s="cap" value="${t(st.cap)}"></label>
         <label class="field">Pale malt delivery size (t)<input type="number" step="0.5" data-s="paleDelivery" value="${t(st.paleDelivery)}"></label>
@@ -33,7 +33,7 @@
       <p class="faint" style="font-size:12px;margin:12px 0 0">The reserve is the lowest level you're comfortable letting a silo reach before a truck arrives. For reference, in your ST26 history Silos 2 + 3 typically held 20 to 35 t when a truck arrived (median about 29 t), so the pool default is 15 t to allow for estimate error. Silo 2 takes each pale truck first and moves it on to Silo 3; Silo 1 takes what doesn't fit. Silos hold 30 t physically but are treated as ${t(st.cap)} t.</p></section>`;
 
     const dates = d.schedule.dates, un = Object.keys(d.unmapped || {});
-    h += `<section class="card" data-acc="sky"><div class="card__h"><div><h2>ST26 data</h2><p class="sub">The site reads two sheets from ST26: Bulk Demand (brewing schedule, silo estimates, and the deliveries typed on the refill lines) and Recipes 1 (silo grain per brew). Nothing else from the workbook is used or stored.</p></div>
+    h += `<section class="card" data-acc="sky"><div class="card__h"><div><span class="eyebrow">Source data</span><h2>ST26 data</h2><p class="sub">The site reads two sheets from ST26: Bulk Demand (brewing schedule, silo estimates, and the deliveries typed on the refill lines) and Recipes 1 (silo grain per brew). Nothing else from the workbook is used or stored.</p></div>
       <button class="btn btn--primary" id="importBtn2" type="button">Upload latest ST26</button></div>
       <div class="grid2"><div class="tcard" style="cursor:default"><b>Source file</b><div>${esc(d.source)}</div><div class="faint" style="font-size:12px">Read ${new Date(d.builtAt).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' })}${App.state.st26 && d === App.state.st26 ? ' (uploaded in the browser)' : ' (bundled with the site)'}</div></div>
       <div class="tcard" style="cursor:default"><b>Schedule covers</b><div>${App.fmtD(dates[0])} to ${App.fmtD(d.schedule.lastBrew)}</div><div class="faint" style="font-size:12px">${d.schedule.brews.length} brew entries. After that, use is estimated.</div></div>
@@ -41,7 +41,7 @@
       <p class="faint" style="font-size:12px;margin:12px 0 0">The upload is read in your browser; the workbook isn't sent anywhere. The estimates and deliveries it contains are saved with your other entries and synced to your other devices.</p>
       <div class="row" style="margin-top:12px">${App.state.st26 ? '<button class="btn" id="resetSt" type="button">Go back to the ST26 that came with the site</button>' : ''}</div></section>`;
 
-    h += `<section class="card" data-acc="ink"><div class="card__h"><div><h2>Backup</h2><p class="sub">Your silo estimates, bookings and settings, as a file.</p></div></div>
+    h += `<section class="card" data-acc="ink"><div class="card__h"><div><span class="eyebrow">Backup</span><h2>Backup</h2><p class="sub">Your silo estimates, bookings and settings, as a file.</p></div></div>
       <div class="row"><button class="btn" id="exportBtn" type="button">Download backup</button><button class="btn" id="restoreBtn" type="button">Restore from backup</button><input type="file" id="restoreFile" accept=".json,application/json" hidden>
       <button class="btn btn--danger" id="wipeBtn" type="button">Clear all entries</button></div></section>`;
     el.innerHTML = h;
